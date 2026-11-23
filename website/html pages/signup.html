@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sign up — Connect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../codes/access-control.js" defer></script>
+<script src="../codes/chat-widget.js" defer></script>
+<script src="../codes/micro-interactions.js" defer></script>
+<style>
+/* ── RESET & BASE ──────────────────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --forest:    #081C10;
+  --forest-mid:#0E3320;
+  --forest-lt: #16542F;
+  --leaf:      #3DBA6F;
+  --leaf-bright:#52D483;
+  --pale:      #C4EDD4;
+  --pale2:     #DFF2E8;
+  --white:     #FFFFFF;
+  --off-white: #F3FAF6;
+  --ink:       #060E09;
+  --ink-mid:   #1A2D20;
+  --muted:     #456050;
+  --border:    #B8D9C5;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Plus Jakarta Sans', sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--white);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.6;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+img{display:block;max-width:100%;}
+button{font-family:var(--font-body);}
+.auth-error{
+  display:none;
+  background:#FDECEC;border:1px solid #F5B5B5;color:#B42318;
+  padding:12px 16px;border-radius:10px;
+  font-size:13px;margin-bottom:18px;
+}
+.auth-success{
+  display:none;
+  background:var(--pale2);border:1px solid var(--forest-lt);color:var(--forest-mid);
+  padding:14px 16px;border-radius:10px;
+  font-size:13.5px;line-height:1.6;margin-bottom:18px;
+}
+.btn-auth-primary:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+
+/* ── NAVBAR (same as index) ───────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 56px;
+  transition:background .4s, box-shadow .4s, padding .4s;
+}
+nav.scrolled{
+  background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(12px);
+  box-shadow:0 1px 0 var(--border);
+  padding:14px 56px;
+}
+.logo{
+  font-family:var(--font-display);
+  font-weight:700;font-size:26px;
+  color:var(--white);
+  letter-spacing:-0.3px;
+  display:flex;align-items:center;gap:8px;
+  transition:color .4s;
+}
+nav.scrolled .logo{color:var(--ink);}
+.logo-mark{
+  width:10px;height:10px;border-radius:50%;
+  background:var(--leaf);
+  transition:transform .3s;
+}
+.logo:hover .logo-mark{transform:scale(1.4);}
+.nav-links{display:flex;gap:52px;}
+.nav-links a{
+  font-size:14px;font-weight:400;
+  color:rgba(255,255,255,0.75);
+  transition:color .3s;
+}
+nav.scrolled .nav-links a{color:var(--muted);}
+.nav-links a:hover{color:var(--white);}
+nav.scrolled .nav-links a:hover{color:var(--ink);}
+.nav-cta{display:flex;gap:10px;}
+.btn-ghost-nav{
+  background:none;
+  border:1px solid rgba(255,255,255,0.35);
+  color:var(--white);
+  padding:9px 20px;border-radius:8px;
+  font-size:13px;font-weight:400;cursor:pointer;
+  font-family:var(--font-body);
+  transition:all .3s;
+}
+nav.scrolled .btn-ghost-nav{border-color:var(--border);color:var(--muted);}
+.btn-ghost-nav:hover{background:rgba(255,255,255,0.12);}
+nav.scrolled .btn-ghost-nav:hover{background:var(--pale2);}
+
+/* ── AUTH SPLIT LAYOUT ────────────────────────────────────── */
+.auth-wrap{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+
+/* Left: brand / dark panel */
+.auth-side{
+  background:var(--forest);
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+  justify-content:center;
+  padding:120px 64px 80px;
+}
+.auth-side::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    radial-gradient(ellipse 700px 550px at 30% 30%, rgba(61,186,111,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 400px at 90% 80%, rgba(82,212,131,0.08) 0%, transparent 60%);
+  pointer-events:none;
+}
+.auth-deco{position:absolute;border-radius:50%;pointer-events:none;border:1px solid rgba(61,186,111,0.10);}
+.auth-deco-1{width:420px;height:420px;top:-140px;left:-100px;}
+.auth-deco-2{width:220px;height:220px;bottom:-60px;right:-60px;border-color:rgba(61,186,111,0.07);}
+
+.auth-side-inner{position:relative;z-index:1;max-width:420px;}
+.auth-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(61,186,111,0.14);
+  border:1px solid rgba(61,186,111,0.28);
+  color:var(--leaf-bright);
+  padding:5px 14px;border-radius:20px;
+  font-size:12px;font-weight:500;
+  letter-spacing:.3px;
+  margin-bottom:24px;
+}
+.tag-pulse{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--leaf);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+.auth-side h1{
+  font-family:var(--font-display);
+  font-size:44px;font-weight:700;
+  line-height:1.1;letter-spacing:-1px;
+  color:var(--white);
+  margin-bottom:18px;
+}
+.auth-side h1 em{font-style:italic;color:var(--leaf);}
+.auth-side-sub{
+  color:rgba(255,255,255,0.6);
+  font-size:16px;font-weight:300;
+  line-height:1.75;
+  margin-bottom:40px;
+}
+.auth-points{display:flex;flex-direction:column;gap:18px;}
+.auth-point{display:flex;align-items:flex-start;gap:12px;}
+.auth-point-icon{
+  width:32px;height:32px;border-radius:9px;flex-shrink:0;
+  background:rgba(61,186,111,0.14);border:1px solid rgba(61,186,111,0.25);
+  display:flex;align-items:center;justify-content:center;font-size:15px;
+}
+.auth-point-text{font-size:13.5px;color:rgba(255,255,255,0.75);line-height:1.6;padding-top:5px;}
+.auth-point-text strong{color:var(--white);font-weight:500;}
+
+/* Right: form panel */
+.auth-form-side{
+  background:var(--white);
+  display:flex;align-items:center;justify-content:center;
+  padding:120px 64px 80px;
+  overflow-y:auto;
+}
+.auth-form-wrap{width:100%;max-width:400px;}
+.auth-form-eyebrow{
+  font-size:11px;font-weight:500;
+  color:var(--leaf);letter-spacing:1.5px;text-transform:uppercase;
+  margin-bottom:10px;
+}
+.auth-form-title{
+  font-family:var(--font-display);
+  font-size:32px;font-weight:700;
+  color:var(--ink);letter-spacing:-.5px;
+  margin-bottom:8px;
+}
+.auth-form-note{
+  font-size:14px;color:var(--muted);font-weight:300;
+  margin-bottom:32px;
+}
+.auth-form-note a{color:var(--forest-mid);font-weight:500;transition:color .2s;}
+.auth-form-note a:hover{color:var(--leaf);}
+
+/* Role selector */
+.role-label{
+  display:block;font-size:12px;font-weight:500;
+  color:var(--ink-mid);margin-bottom:10px;
+}
+.role-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;}
+.role-card{
+  cursor:pointer;
+  background:var(--off-white);
+  border:1.5px solid var(--border);
+  border-radius:12px;padding:16px 14px;
+  transition:all .2s;
+  position:relative;
+}
+.role-card input{position:absolute;opacity:0;pointer-events:none;}
+.role-card:hover{border-color:var(--forest-lt);}
+.role-card.selected{border-color:var(--forest-lt);background:var(--pale2);box-shadow:0 0 0 3px rgba(22,84,47,0.08);}
+.role-card-icon{font-size:18px;margin-bottom:8px;}
+.role-card-title{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.role-card-desc{font-size:11.5px;color:var(--muted);line-height:1.5;font-weight:300;}
+
+.field-group{margin-bottom:18px;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.field-label{
+  display:block;font-size:12px;font-weight:500;
+  color:var(--ink-mid);margin-bottom:8px;
+  letter-spacing:.2px;
+}
+.field-input{
+  width:100%;
+  background:var(--off-white);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:13px 16px;
+  font-size:14px;font-family:var(--font-body);
+  color:var(--ink);
+  transition:border-color .2s, box-shadow .2s, background .2s;
+}
+.field-input::placeholder{color:#8FAD9C;}
+.field-input:focus{
+  outline:none;
+  border-color:var(--forest-lt);
+  background:var(--white);
+  box-shadow:0 0 0 3px rgba(22,84,47,0.10);
+}
+.field-hint{font-size:11.5px;color:var(--muted);margin-top:6px;font-weight:300;}
+
+.field-check{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:var(--muted);margin-bottom:24px;line-height:1.6;}
+.field-check input{accent-color:var(--forest-lt);width:14px;height:14px;margin-top:2px;flex-shrink:0;}
+.field-check a{color:var(--forest-mid);font-weight:500;}
+
+.btn-auth-primary{
+  width:100%;
+  background:var(--forest);color:var(--white);
+  border:none;padding:15px;border-radius:10px;
+  font-size:15px;font-weight:500;cursor:pointer;
+  font-family:var(--font-body);
+  transition:all .25s;
+}
+.btn-auth-primary:hover{background:var(--forest-mid);transform:translateY(-2px);}
+
+/* Responsive */
+@media (max-width:920px){
+  .auth-wrap{grid-template-columns:1fr;}
+  .auth-side{display:none;}
+  .auth-form-side{padding:140px 24px 80px;}
+}
+/* Shared navigation: keep every destination reachable on narrow screens. */
+@media (max-width:760px){
+  nav{padding:16px 24px;flex-wrap:wrap;gap:14px;}
+  .nav-links{order:3;width:100%;gap:18px;overflow-x:auto;padding-bottom:4px;}
+  .nav-links a{white-space:nowrap;}
+  .nav-cta{margin-left:auto;}
+  .btn-ghost-nav,.btn-fill-nav{padding:8px 12px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────── -->
+<nav id="navbar">
+  <a href="index.html" class="logo" aria-label="Connect home">
+    <div class="logo-mark"></div>
+    Connect
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="explore-events.html">Explore events</a>
+    <a href="sponsors.html" data-student-only hidden>Sponsors</a>
+    <a href="become-a-sponsor.html">Become a sponsor</a>
+    <a href="about.html">About</a>
+  </div>
+  <div class="nav-cta">
+    <button class="btn-ghost-nav" onclick="window.location.href='login.html'">Log in</button>
+  </div>
+</nav>
+
+<!-- ── AUTH SPLIT ───────────────────────────────────────────── -->
+<div class="auth-wrap">
+
+  <!-- Left brand panel -->
+  <div class="auth-side">
+    <div class="auth-deco auth-deco-1"></div>
+    <div class="auth-deco auth-deco-2"></div>
+    <div class="auth-side-inner">
+      <div class="auth-tag">
+        <div class="tag-pulse"></div>
+        Now live at LAU, AUB &amp; NDU
+      </div>
+      <h1>Join the campus<br><em>everyone's on.</em></h1>
+      <p class="auth-side-sub">Create your free account to browse events, or verify your university email to unlock everything happening on your own campus.</p>
+      <div class="auth-points">
+        <div class="auth-point">
+          <div class="auth-point-icon">🎓</div>
+          <div class="auth-point-text"><strong>Any email works</strong> — browse and register for public events right away.</div>
+        </div>
+        <div class="auth-point">
+          <div class="auth-point-icon">🔓</div>
+          <div class="auth-point-text"><strong>University email unlocks more</strong> — see private clubs, workshops, and internal events at your school.</div>
+        </div>
+        <div class="auth-point">
+          <div class="auth-point-icon">🎟</div>
+          <div class="auth-point-text"><strong>Instant QR tickets</strong> — no printing, no waiting, straight to your inbox.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right form panel -->
+  <div class="auth-form-side">
+    <div class="auth-form-wrap">
+      <div class="auth-form-eyebrow">Get started</div>
+      <h2 class="auth-form-title">Create your account</h2>
+      <p class="auth-form-note">Already on Connect? <a href="login.html">Log in</a></p>
+
+      <div class="auth-error" id="authError"></div>
+      <div class="auth-success" id="authSuccess"></div>
+
+      <form id="signupForm">
+
+        <span class="role-label">I am a...</span>
+        <div class="role-cards">
+          <label class="role-card selected" id="roleGeneral">
+            <input type="radio" name="role" value="general" checked/>
+            <div class="role-card-icon">🌐</div>
+            <div class="role-card-title">General user</div>
+            <div class="role-card-desc">Any email. Browse &amp; register for public events.</div>
+          </label>
+          <label class="role-card" id="roleStudent">
+            <input type="radio" name="role" value="student"/>
+            <div class="role-card-icon">🎓</div>
+            <div class="role-card-title">Student</div>
+            <div class="role-card-desc">University email. Unlocks private campus events.</div>
+          </label>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="fullname">Full name</label>
+          <input class="field-input" type="text" id="fullname" placeholder="your name" required/>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="email">Email address</label>
+          <input class="field-input" type="email" id="email" placeholder="you@example.com" required/>
+          <div class="field-hint" id="emailHint">Use any email address to sign up as a general user.</div>
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="password">Password</label>
+            <input class="field-input" type="password" id="password" placeholder="Create a password" required/>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="confirm">Confirm password</label>
+            <input class="field-input" type="password" id="confirm" placeholder="Repeat password" required/>
+          </div>
+        </div>
+
+        <label class="field-check">
+          <input type="checkbox" required/>
+          I agree to Connect's <a href="terms-of-service.html">Terms of Service</a> and <a href="privacy-policy.html">Privacy Policy</a>
+        </label>
+
+        <button type="submit" class="btn-auth-primary" id="submitBtn">Create account</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+/* Role card selection + dynamic email hint */
+const roleGeneral = document.getElementById('roleGeneral');
+const roleStudent = document.getElementById('roleStudent');
+const emailHint = document.getElementById('emailHint');
+const emailInput = document.getElementById('email');
+
+function selectRole(selected, other, hintText, placeholder){
+  selected.classList.add('selected');
+  other.classList.remove('selected');
+  emailHint.textContent = hintText;
+  emailInput.placeholder = placeholder;
+}
+roleGeneral.addEventListener('click', () => selectRole(roleGeneral, roleStudent, 'Use any email address to sign up as a general user.', 'you@example.com'));
+roleStudent.addEventListener('click', () => selectRole(roleStudent, roleGeneral, 'Use your university email (e.g. @lau.edu.lb) so we can verify your campus.', 'you@university.edu.lb'));
+
+/* ── SUPABASE SIGNUP ─────────────────────────────────────── */
+const SUPABASE_URL = 'https://zzkmvoxguxwwiarmyusq.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_fJTo7h740aOw-l-fCsGN-Q_bhgj_l0a';
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const signupForm = document.getElementById('signupForm');
+const submitBtn = document.getElementById('submitBtn');
+const authError = document.getElementById('authError');
+const authSuccess = document.getElementById('authSuccess');
+
+function showError(message){
+  authError.textContent = message;
+  authError.style.display = 'block';
+  authSuccess.style.display = 'none';
+}
+function showSuccess(message){
+  authSuccess.textContent = message;
+  authSuccess.style.display = 'block';
+  authError.style.display = 'none';
+}
+
+signupForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  authError.style.display = 'none';
+  authSuccess.style.display = 'none';
+
+  const fullName = document.getElementById('fullname').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const confirm = document.getElementById('confirm').value;
+  const requestedRole = document.querySelector('input[name="role"]:checked').value;
+
+  if (password !== confirm) {
+    showError("Passwords don't match. Please check and try again.");
+    return;
+  }
+  if (password.length < 8) {
+    showError('Password must be at least 8 characters long.');
+    return;
+  }
+  if (requestedRole === 'student' && !ConnectAccess.isUniversityEmail(email)) {
+    showError('Use a supported university email to register as a student (LAU, AUB, or NDU).');
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Creating account...';
+
+  const { data, error } = await supabaseClient.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { full_name: fullName, requested_role: requestedRole },
+      emailRedirectTo: window.location.origin + '/login.html'
+    }
+  });
+
+  submitBtn.disabled = false;
+  submitBtn.textContent = 'Create account';
+
+  if (error) {
+    showError(error.message);
+    return;
+  }
+
+  signupForm.reset();
+  showSuccess(`Account created! We've sent a confirmation link to ${email} — please verify your email before logging in.`);
+});
+</script>
+</body>
+</html>

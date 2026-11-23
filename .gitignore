@@ -1,0 +1,16 @@
+# The local Supabase dump contains authentication records and must not be committed.
+connect_backup.sql
+
+website/server/.env
+website/server/node_modules/
+website/server/.pnpm-store/
+._*
+.DS_Store
+
+# Next.js app
+app/node_modules/
+app/.next/
+app/.env*.local
+app/.env
+!app/.env.example
+.claude/settings.local.json

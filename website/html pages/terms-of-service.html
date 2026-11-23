@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Terms of Service — Connect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --forest:    #081C10;
+  --forest-mid:#0E3320;
+  --forest-lt: #16542F;
+  --leaf:      #3DBA6F;
+  --leaf-bright:#52D483;
+  --pale:      #C4EDD4;
+  --pale2:     #DFF2E8;
+  --white:     #FFFFFF;
+  --off-white: #F3FAF6;
+  --ink:       #060E09;
+  --ink-mid:   #1A2D20;
+  --muted:     #456050;
+  --border:    #B8D9C5;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Plus Jakarta Sans', sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--white);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.6;overflow-x:hidden;}
+a{text-decoration:none;color:var(--forest-mid);font-weight:500;}
+a:hover{color:var(--leaf);}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 56px;
+  transition:background .4s, box-shadow .4s, padding .4s;
+}
+nav.scrolled{
+  background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(12px);
+  box-shadow:0 1px 0 var(--border);
+  padding:14px 56px;
+}
+.logo{
+  font-family:var(--font-display);
+  font-weight:700;font-size:26px;
+  color:var(--white);
+  letter-spacing:-0.3px;
+  display:flex;align-items:center;gap:8px;
+  transition:color .4s;
+}
+nav.scrolled .logo{color:var(--ink);}
+.logo-mark{
+  width:10px;height:10px;border-radius:50%;
+  background:var(--leaf);
+  transition:transform .3s;
+}
+.logo:hover .logo-mark{transform:scale(1.4);}
+.nav-links{display:flex;gap:52px;}
+.nav-links a{
+  font-size:14px;font-weight:400;
+  color:rgba(255,255,255,0.75);
+  transition:color .3s;
+}
+nav.scrolled .nav-links a{color:var(--muted);}
+.nav-links a:hover{color:var(--white);}
+nav.scrolled .nav-links a:hover{color:var(--ink);}
+.nav-cta{display:flex;gap:10px;}
+.btn-ghost-nav{
+  background:none;
+  border:1px solid rgba(255,255,255,0.35);
+  color:var(--white);
+  padding:9px 20px;border-radius:8px;
+  font-size:13px;font-weight:400;cursor:pointer;
+  font-family:var(--font-body);
+  transition:all .3s;
+}
+nav.scrolled .btn-ghost-nav{border-color:var(--border);color:var(--muted);}
+.btn-ghost-nav:hover{background:rgba(255,255,255,0.12);}
+nav.scrolled .btn-ghost-nav:hover{background:var(--pale2);}
+.btn-fill-nav{
+  background:var(--white);color:var(--forest);
+  border:none;padding:9px 20px;border-radius:8px;
+  font-size:13px;font-weight:500;cursor:pointer;
+  font-family:var(--font-body);
+  transition:all .3s;
+}
+nav.scrolled .btn-fill-nav{background:var(--forest);color:var(--white);}
+.btn-fill-nav:hover{background:var(--pale);color:var(--forest-mid);}
+nav.scrolled .btn-fill-nav:hover{background:var(--forest-mid);}
+
+.legal-hero{
+  background:var(--forest);
+  padding:160px 56px 64px;
+  position:relative;overflow:hidden;
+}
+.legal-hero::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(ellipse 800px 500px at 30% 20%, rgba(61,186,111,0.10) 0%, transparent 70%);
+  pointer-events:none;
+}
+.legal-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(61,186,111,0.14);
+  border:1px solid rgba(61,186,111,0.28);
+  color:var(--leaf-bright);
+  padding:5px 14px;border-radius:20px;
+  font-size:12px;font-weight:500;letter-spacing:.3px;
+  margin-bottom:20px;position:relative;z-index:1;
+}
+.legal-hero h1{
+  font-family:var(--font-display);
+  font-size:46px;font-weight:700;
+  letter-spacing:-1px;color:var(--white);
+  margin-bottom:12px;position:relative;z-index:1;
+}
+.legal-updated{
+  color:rgba(255,255,255,0.5);font-size:13.5px;font-weight:300;
+  position:relative;z-index:1;
+}
+
+.legal-body{
+  max-width:760px;margin:0 auto;
+  padding:72px 56px 100px;
+}
+.legal-section{margin-bottom:44px;}
+.legal-section h2{
+  font-family:var(--font-display);
+  font-size:24px;font-weight:700;
+  color:var(--ink);margin-bottom:14px;
+  letter-spacing:-.3px;
+}
+.legal-section p{
+  color:var(--muted);font-size:15px;font-weight:300;
+  line-height:1.8;margin-bottom:12px;
+}
+.legal-section ul{
+  margin:12px 0 0 0;padding-left:20px;
+  color:var(--muted);font-size:15px;font-weight:300;line-height:1.8;
+}
+.legal-section li{margin-bottom:6px;}
+.legal-section strong{color:var(--ink-mid);font-weight:500;}
+
+footer{
+  background:var(--ink);
+  padding:40px 56px;
+  display:flex;align-items:center;
+  justify-content:space-between;
+}
+.footer-logo{
+  font-family:var(--font-display);font-size:20px;font-weight:700;
+  color:var(--white);display:flex;align-items:center;gap:8px;
+}
+.footer-copy{font-size:12px;color:rgba(255,255,255,0.3);}
+.footer-links{display:flex;gap:24px;}
+.footer-links a{font-size:12px;color:rgba(255,255,255,0.35);font-weight:400;transition:color .2s;}
+.footer-links a:hover{color:var(--leaf);}
+
+@media (max-width:760px){
+  nav{padding:16px 24px;flex-wrap:wrap;gap:14px;}
+  .nav-links{order:3;width:100%;gap:18px;overflow-x:auto;padding-bottom:4px;}
+  .nav-links a{white-space:nowrap;}
+  .nav-cta{margin-left:auto;}
+  .btn-ghost-nav,.btn-fill-nav{padding:8px 12px;}
+  .legal-hero{padding:140px 24px 48px;}
+  .legal-hero h1{font-size:32px;}
+  .legal-body{padding:48px 24px 72px;}
+  footer{flex-direction:column;gap:16px;padding:32px 24px;}
+}
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="index.html" class="logo" aria-label="Connect home">
+    <div class="logo-mark"></div>
+    Connect
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#hero">Explore events</a>
+    <a href="sponsors.html">Sponsors</a>
+    <a href="become-a-sponsor.html">Become a sponsor</a>
+    <a href="about.html">About</a>
+  </div>
+  <div class="nav-cta">
+    <button class="btn-ghost-nav" onclick="window.location.href='login.html'">Log in</button>
+    <button class="btn-fill-nav" onclick="window.location.href='signup.html'">Sign up free</button>
+  </div>
+</nav>
+
+<section class="legal-hero">
+  <div class="legal-tag"><span>📋</span> Terms of Service</div>
+  <h1>The terms behind using Connect.</h1>
+  <p class="legal-updated">Last updated: August 2026</p>
+</section>
+
+<section class="legal-body">
+
+  <div class="legal-section">
+    <h2>Overview</h2>
+    <p>These terms govern your use of Connect, a university events platform that helps students discover and register for events, and connects event organizers with sponsors. By creating an account, you agree to the terms below.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>Who can use Connect</h2>
+    <p>Connect is open to two types of users:</p>
+    <ul>
+      <li><strong>General users</strong> — anyone with a valid email address can browse and register for public events</li>
+      <li><strong>Verified students</strong> — users who sign up with a recognized university email (LAU, AUB, or NDU) and confirm it receive access to private, university-only events in addition to public ones</li>
+    </ul>
+    <p>You're responsible for keeping your account credentials secure and for all activity that happens under your account.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>Event registration</h2>
+    <p>Registering for an event through Connect reserves your spot, subject to the event's stated capacity. Some events may require payment via Wish Money or OMT before registration is confirmed. Each confirmed registration generates a QR code ticket used for check-in at the event. Cancellation and refund policies are set by individual event organizers, not by Connect directly.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>Private, university-only events</h2>
+    <p>Access to private events is limited to verified students of the matching university. Attempting to access private events you're not eligible for, or misrepresenting your university affiliation to gain access, is a violation of these terms.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>Sponsors</h2>
+    <p>Businesses may apply to become a sponsor through the sponsor application form. All applications are reviewed before approval, and Connect reserves the right to accept or decline any application. Approved sponsors are expected to provide accurate business information.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>Acceptable use</h2>
+    <p>You agree not to misuse the platform — including submitting false information, attempting to bypass access controls, or using the platform to harass or spam other users.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>Changes to these terms</h2>
+    <p>As Connect continues to develop, these terms may be updated. Continued use of the platform after changes are posted means you accept the revised terms.</p>
+  </div>
+
+  <div class="legal-section">
+    <h2>Contact</h2>
+    <p>Questions about these terms? Reach out at <a href="mailto:kevinabdelnour5@gmail.com">kevinabdelnour5@gmail.com</a>.</p>
+  </div>
+
+</section>
+
+<footer>
+  <div class="footer-logo">
+    <div class="logo-mark" style="background:#3DBA6F;width:8px;height:8px;border-radius:50%;"></div>
+    Connect
+  </div>
+  <div class="footer-copy">© 2025 Connect · Capstone project by Kevin Abdelnour</div>
+  <div class="footer-links">
+    <a href="privacy-policy.html">Privacy</a>
+    <a href="terms-of-service.html">Terms</a>
+    <a href="about.html">Contact</a>
+  </div>
+</footer>
+
+<script>
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+</script>
+</body>
+</html>

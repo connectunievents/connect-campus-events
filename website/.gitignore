@@ -1,0 +1,8 @@
+server/node_modules/
+server/.env
+server/.pnpm-store/
+.env
+.DS_Store
+npm-debug.log*
+pnpm-debug.log*
+._*

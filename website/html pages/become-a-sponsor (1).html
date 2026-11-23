@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Become a Sponsor — Connect</title>
+<meta http-equiv="refresh" content="0;url=become-a-sponsor.html"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ── RESET & BASE ──────────────────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --forest:    #081C10;
+  --forest-mid:#0E3320;
+  --forest-lt: #16542F;
+  --leaf:      #3DBA6F;
+  --leaf-bright:#52D483;
+  --pale:      #C4EDD4;
+  --pale2:     #DFF2E8;
+  --white:     #FFFFFF;
+  --off-white: #F3FAF6;
+  --ink:       #060E09;
+  --ink-mid:   #1A2D20;
+  --muted:     #456050;
+  --border:    #B8D9C5;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Plus Jakarta Sans', sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--white);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.6;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+img{display:block;max-width:100%;}
+button{font-family:var(--font-body);}
+
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1);}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+.delay-1{transition-delay:.1s;}
+.delay-2{transition-delay:.2s;}
+.delay-3{transition-delay:.3s;}
+
+/* ── NAVBAR ───────────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 56px;
+  transition:background .4s, box-shadow .4s, padding .4s;
+}
+nav.scrolled{
+  background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(12px);
+  box-shadow:0 1px 0 var(--border);
+  padding:14px 56px;
+}
+.logo{
+  font-family:var(--font-display);font-weight:700;font-size:26px;
+  color:var(--white);letter-spacing:-0.3px;
+  display:flex;align-items:center;gap:8px;transition:color .4s;
+}
+nav.scrolled .logo{color:var(--ink);}
+.logo-mark{width:10px;height:10px;border-radius:50%;background:var(--leaf);transition:transform .3s;}
+.logo:hover .logo-mark{transform:scale(1.4);}
+.nav-links{display:flex;gap:52px;}
+.nav-links a{font-size:14px;font-weight:400;color:rgba(255,255,255,0.75);transition:color .3s;}
+nav.scrolled .nav-links a{color:var(--muted);}
+.nav-links a:hover{color:var(--white);}
+nav.scrolled .nav-links a:hover{color:var(--ink);}
+.nav-links a.active{color:var(--white);font-weight:500;}
+nav.scrolled .nav-links a.active{color:var(--forest-mid);}
+.nav-cta{display:flex;gap:10px;}
+.btn-ghost-nav{
+  background:none;border:1px solid rgba(255,255,255,0.35);color:var(--white);
+  padding:9px 20px;border-radius:8px;font-size:13px;font-weight:400;cursor:pointer;
+  font-family:var(--font-body);transition:all .3s;
+}
+nav.scrolled .btn-ghost-nav{border-color:var(--border);color:var(--muted);}
+.btn-ghost-nav:hover{background:rgba(255,255,255,0.12);}
+nav.scrolled .btn-ghost-nav:hover{background:var(--pale2);}
+.btn-fill-nav{
+  background:var(--white);color:var(--forest);border:none;padding:9px 20px;border-radius:8px;
+  font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-body);transition:all .3s;
+}
+nav.scrolled .btn-fill-nav{background:var(--forest);color:var(--white);}
+.btn-fill-nav:hover{background:var(--pale);color:var(--forest-mid);}
+nav.scrolled .btn-fill-nav:hover{background:var(--forest-mid);}
+
+/* ── HERO ─────────────────────────────────────────────────── */
+.hero{
+  background:var(--forest);
+  padding:150px 56px 90px;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    radial-gradient(ellipse 800px 600px at 20% 40%, rgba(61,186,111,0.11) 0%, transparent 70%),
+    radial-gradient(ellipse 600px 400px at 85% 15%, rgba(82,212,131,0.07) 0%, transparent 60%);
+  pointer-events:none;
+}
+.hero-deco{position:absolute;border-radius:50%;pointer-events:none;border:1px solid rgba(61,186,111,0.10);}
+.hero-deco-1{width:460px;height:460px;top:-160px;right:-120px;}
+.hero-deco-2{width:220px;height:220px;bottom:-60px;left:-80px;border-color:rgba(61,186,111,0.07);}
+.hero-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1;
+  display:grid;grid-template-columns:1.1fr 0.9fr;gap:70px;align-items:center;}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(61,186,111,0.14);border:1px solid rgba(61,186,111,0.28);
+  color:var(--leaf-bright);padding:5px 14px;border-radius:20px;
+  font-size:12px;font-weight:500;letter-spacing:.3px;margin-bottom:24px;
+}
+.tag-pulse{width:6px;height:6px;border-radius:50%;background:var(--leaf);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+.hero h1{
+  font-family:var(--font-display);font-size:54px;font-weight:700;
+  line-height:1.06;letter-spacing:-1.2px;color:var(--white);margin-bottom:20px;
+}
+.hero h1 em{font-style:italic;color:var(--leaf);}
+.hero-sub{color:rgba(255,255,255,0.6);font-size:16.5px;font-weight:300;line-height:1.75;max-width:460px;margin-bottom:36px;}
+.hero-btns{display:flex;gap:12px;}
+.btn-hero-primary{
+  background:var(--white);color:var(--forest);border:none;padding:14px 28px;border-radius:10px;
+  font-size:15px;font-weight:500;cursor:pointer;font-family:var(--font-body);transition:all .25s;
+}
+.btn-hero-primary:hover{background:var(--pale);transform:translateY(-2px);}
+.btn-hero-ghost{
+  background:none;border:1px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.8);
+  padding:14px 28px;border-radius:10px;font-size:15px;cursor:pointer;font-family:var(--font-body);transition:all .25s;
+}
+.btn-hero-ghost:hover{border-color:rgba(255,255,255,0.5);color:var(--white);}
+
+/* Benefits list on the right of hero */
+.benefits-list{display:flex;flex-direction:column;gap:18px;}
+.benefit{
+  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);
+  border-radius:14px;padding:18px 20px;
+  display:flex;align-items:flex-start;gap:14px;
+  backdrop-filter:blur(10px);
+}
+.benefit-icon{
+  width:38px;height:38px;border-radius:10px;flex-shrink:0;
+  background:rgba(61,186,111,0.16);border:1px solid rgba(61,186,111,0.28);
+  display:flex;align-items:center;justify-content:center;font-size:17px;
+}
+.benefit-title{font-size:14.5px;font-weight:600;color:var(--white);margin-bottom:4px;}
+.benefit-desc{font-size:12.5px;color:rgba(255,255,255,0.55);line-height:1.6;font-weight:300;}
+
+/* ── STATS STRIP ──────────────────────────────────────────── */
+.stats-strip{
+  background:var(--off-white);border-bottom:1px solid var(--border);
+  padding:36px 56px;
+  display:flex;justify-content:center;gap:80px;flex-wrap:wrap;
+}
+.stat{text-align:center;}
+.stat-num{font-family:var(--font-display);font-size:30px;font-weight:700;color:var(--forest-mid);letter-spacing:-.5px;}
+.stat-label{font-size:12px;color:var(--muted);margin-top:4px;}
+
+/* ── SHARED SECTION HEADING ───────────────────────────────── */
+.section-eyebrow{font-size:11px;font-weight:500;color:var(--leaf);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;}
+.section-heading{font-family:var(--font-display);font-size:38px;font-weight:700;line-height:1.1;letter-spacing:-1px;color:var(--ink);margin-bottom:10px;}
+.section-heading em{font-style:italic;color:var(--forest-mid);}
+.section-sub{color:var(--muted);font-size:15.5px;font-weight:300;max-width:480px;margin-bottom:8px;line-height:1.7;}
+
+/* ── APPLICATION FORM SECTION ──────────────────────────────── */
+.apply-section{padding:100px 56px;max-width:900px;margin:0 auto;}
+.apply-head{text-align:center;margin-bottom:48px;}
+.apply-head .section-sub{margin-left:auto;margin-right:auto;}
+
+.apply-card{
+  background:var(--off-white);border:1px solid var(--border);
+  border-radius:20px;padding:44px 48px;
+}
+
+.form-block-title{
+  font-size:12px;font-weight:600;color:var(--forest-mid);
+  text-transform:uppercase;letter-spacing:.8px;
+  margin:32px 0 16px;
+}
+.form-block-title:first-child{margin-top:0;}
+
+.role-label{display:block;font-size:12px;font-weight:500;color:var(--ink-mid);margin-bottom:10px;}
+.role-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:8px;}
+.role-card{
+  cursor:pointer;background:var(--white);border:1.5px solid var(--border);
+  border-radius:12px;padding:16px 14px;transition:all .2s;position:relative;
+}
+.role-card input{position:absolute;opacity:0;pointer-events:none;}
+.role-card:hover{border-color:var(--forest-lt);}
+.role-card.selected{border-color:var(--forest-lt);background:var(--pale2);box-shadow:0 0 0 3px rgba(22,84,47,0.08);}
+.role-card-icon{font-size:18px;margin-bottom:8px;}
+.role-card-title{font-size:13px;font-weight:600;color:var(--ink);}
+
+.field-group{margin-bottom:20px;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.field-label{display:block;font-size:12px;font-weight:500;color:var(--ink-mid);margin-bottom:8px;letter-spacing:.2px;}
+.field-label .optional{color:var(--muted);font-weight:300;text-transform:none;letter-spacing:0;}
+.field-input, .field-textarea, .field-select{
+  width:100%;background:var(--white);border:1px solid var(--border);border-radius:10px;
+  padding:13px 16px;font-size:14px;font-family:var(--font-body);color:var(--ink);
+  transition:border-color .2s, box-shadow .2s;
+}
+.field-textarea{resize:vertical;min-height:100px;line-height:1.6;}
+.field-input::placeholder, .field-textarea::placeholder{color:#8FAD9C;}
+.field-input:focus, .field-textarea:focus, .field-select:focus{
+  outline:none;border-color:var(--forest-lt);box-shadow:0 0 0 3px rgba(22,84,47,0.10);
+}
+.field-hint{font-size:11.5px;color:var(--muted);margin-top:6px;font-weight:300;}
+
+/* Logo upload */
+.upload-box{
+  border:1.5px dashed var(--border);border-radius:12px;
+  padding:24px;text-align:center;background:var(--white);
+  cursor:pointer;transition:all .2s;
+}
+.upload-box:hover{border-color:var(--forest-lt);background:var(--pale2);}
+.upload-box.has-file{border-style:solid;border-color:var(--forest-lt);}
+.upload-icon{font-size:22px;margin-bottom:8px;}
+.upload-text{font-size:13px;color:var(--muted);}
+.upload-text strong{color:var(--forest-mid);}
+.upload-filename{font-size:12.5px;color:var(--forest-mid);font-weight:500;margin-top:6px;}
+
+.field-check{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:var(--muted);margin:24px 0 28px;line-height:1.6;}
+.field-check input{accent-color:var(--forest-lt);width:14px;height:14px;margin-top:2px;flex-shrink:0;}
+.field-check a{color:var(--forest-mid);font-weight:500;}
+
+.btn-submit{
+  width:100%;background:var(--forest);color:var(--white);border:none;padding:16px;
+  border-radius:10px;font-size:15px;font-weight:500;cursor:pointer;font-family:var(--font-body);
+  transition:all .25s;
+}
+.btn-submit:hover{background:var(--forest-mid);transform:translateY(-2px);}
+
+.review-note{
+  display:flex;align-items:flex-start;gap:12px;
+  background:var(--pale2);border:1px solid var(--border);border-radius:12px;
+  padding:16px 18px;margin-top:24px;font-size:13px;color:var(--forest);line-height:1.65;
+}
+.review-note-icon{font-size:16px;flex-shrink:0;}
+
+/* ── SUCCESS STATE ────────────────────────────────────────── */
+.success-card{display:none;text-align:center;padding:20px 10px 10px;}
+.success-icon{
+  width:64px;height:64px;border-radius:50%;background:var(--pale);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 20px;
+}
+.success-title{font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--ink);margin-bottom:10px;}
+.success-desc{font-size:14px;color:var(--muted);max-width:380px;margin:0 auto 24px;line-height:1.7;font-weight:300;}
+
+/* ── FOOTER ───────────────────────────────────────────────── */
+footer{background:var(--ink);padding:40px 56px;display:flex;align-items:center;justify-content:space-between;}
+.footer-logo{font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--white);display:flex;align-items:center;gap:8px;}
+.footer-copy{font-size:12px;color:rgba(255,255,255,0.3);}
+.footer-links{display:flex;gap:24px;}
+.footer-links a{font-size:12px;color:rgba(255,255,255,0.35);transition:color .2s;}
+.footer-links a:hover{color:var(--leaf);}
+
+@media (max-width:900px){
+  .hero-inner{grid-template-columns:1fr;gap:40px;}
+  .apply-card{padding:32px 24px;}
+  .field-row, .role-cards{grid-template-columns:1fr;}
+  .stats-strip{gap:36px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────── -->
+<nav id="navbar">
+  <a href="index.html" class="logo">
+    <div class="logo-mark"></div>
+    Connect
+  </a>
+  <div class="nav-links">
+    <a href="index.html#hero">Explore events</a>
+    <a href="sponsors.html">Sponsors</a>
+    <a href="become-a-sponsor.html" class="active">Become a sponsor</a>
+    <a href="about.html">About</a>
+  </div>
+  <div class="nav-cta">
+    <button class="btn-ghost-nav" onclick="window.location.href='login.html'">Log in</button>
+    <button class="btn-fill-nav" onclick="window.location.href='signup.html'">Sign up free</button>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-deco hero-deco-1"></div>
+  <div class="hero-deco hero-deco-2"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-tag"><div class="tag-pulse"></div> For businesses</div>
+      <h1>Put your brand in<br>front of <em>campus.</em></h1>
+      <p class="hero-sub">Connect puts your business in front of thousands of engaged students across LAU, AUB, NDU and beyond — right where they're already discovering events.</p>
+      <div class="hero-btns">
+        <button class="btn-hero-primary" onclick="document.getElementById('applyForm').scrollIntoView({behavior:'smooth'})">Apply for sponsorship</button>
+        <button class="btn-hero-ghost" onclick="window.location.href='sponsors.html'">See current sponsors →</button>
+      </div>
+    </div>
+    <div class="benefits-list">
+      <div class="benefit reveal-left">
+        <div class="benefit-icon">📣</div>
+        <div>
+          <div class="benefit-title">Featured on the Sponsors page</div>
+          <div class="benefit-desc">Your logo, description, and contact info shown to every student browsing Connect.</div>
+        </div>
+      </div>
+      <div class="benefit reveal-left delay-1">
+        <div class="benefit-icon">🎯</div>
+        <div>
+          <div class="benefit-title">Reach the right students</div>
+          <div class="benefit-desc">Get discovered by students actively attending workshops, talks, and club events on campus.</div>
+        </div>
+      </div>
+      <div class="benefit reveal-left delay-2">
+        <div class="benefit-icon">🌐</div>
+        <div>
+          <div class="benefit-title">Cross-university exposure</div>
+          <div class="benefit-desc">One application gets you visibility across every university on the platform, not just one.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS STRIP ──────────────────────────────────────────── -->
+<div class="stats-strip">
+  <div class="stat"><div class="stat-num">3</div><div class="stat-label">Partner universities</div></div>
+  <div class="stat"><div class="stat-num">9+</div><div class="stat-label">Active sponsors</div></div>
+  <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Reviewed before going live</div></div>
+</div>
+
+<!-- ── APPLICATION FORM ──────────────────────────────────────── -->
+<section class="apply-section" id="applyForm">
+  <div class="apply-head reveal">
+    <div class="section-eyebrow">Sponsorship application</div>
+    <h2 class="section-heading">Tell us about<br><em>your business.</em></h2>
+    <p class="section-sub">Fill in your details below. Once submitted, our admin team reviews your application before it appears on the Sponsors page.</p>
+  </div>
+
+  <div class="apply-card reveal">
+    <!-- Application form -->
+    <div id="formView">
+      <form onsubmit="return false;" id="sponsorForm">
+
+        <div class="form-block-title">Category</div>
+        <span class="role-label">Which best describes what you offer?</span>
+        <div class="role-cards" id="roleCards">
+          <label class="role-card selected" data-cat="food">
+            <input type="radio" name="category" value="food" checked/>
+            <div class="role-card-icon">🍔</div>
+            <div class="role-card-title">Food &amp; Beverages</div>
+          </label>
+          <label class="role-card" data-cat="sweets">
+            <input type="radio" name="category" value="sweets"/>
+            <div class="role-card-icon">🍰</div>
+            <div class="role-card-title">Sweets</div>
+          </label>
+          <label class="role-card" data-cat="others">
+            <input type="radio" name="category" value="others"/>
+            <div class="role-card-icon">📦</div>
+            <div class="role-card-title">Others</div>
+          </label>
+        </div>
+
+        <div class="form-block-title">Business details</div>
+
+        <div class="field-group">
+          <label class="field-label" for="bizName">Business name</label>
+          <input class="field-input" type="text" id="bizName" placeholder="e.g. Beirut Brew Co." minlength="2" required/>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="bizProof">Website, Instagram, or registration number <span class="optional">(helps us verify you're a real business)</span></label>
+          <input class="field-input" type="text" id="bizProof" placeholder="e.g. instagram.com/beirutbrew or commercial registry no." required/>
+          <div class="field-hint">Every application is checked by an admin before approval — this is what they'll use to confirm your business is real.</div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="productType">What are you offering?</label>
+          <input class="field-input" type="text" id="productType" placeholder="e.g. Specialty coffee & cold brew" minlength="3" required/>
+          <div class="field-hint">This shows up as a short line under your logo on the Sponsors page.</div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="description">Business description</label>
+          <textarea class="field-textarea" id="description" placeholder="Tell students what your business does and what you're bringing to campus events..." minlength="30" required></textarea>
+          <div class="field-hint">At least a few sentences — this is what students read before reaching out to you.</div>
+        </div>
+
+        <!-- Honeypot field: invisible to real users, but bots that auto-fill forms
+             tend to fill every input including hidden ones. If this has a value
+             on submit, treat the application as spam and silently reject it. -->
+        <div style="position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden;" aria-hidden="true">
+          <label for="website_hp">Leave this field empty</label>
+          <input type="text" id="website_hp" name="website_hp" tabindex="-1" autocomplete="off"/>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Logo <span class="optional">(PNG or SVG, shown on your sponsor card)</span></label>
+          <label class="upload-box" id="uploadBox" for="logoUpload">
+            <div class="upload-icon">🖼️</div>
+            <div class="upload-text"><strong>Click to upload</strong> or drag your logo here</div>
+            <div class="upload-filename" id="uploadFilename"></div>
+          </label>
+          <input type="file" id="logoUpload" accept="image/png,image/svg+xml,image/jpeg" style="display:none;"/>
+        </div>
+
+        <div class="form-block-title">Contact information</div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="contactEmail">Contact email</label>
+            <input class="field-input" type="email" id="contactEmail" placeholder="you@business.com" required/>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="contactPhone">Phone <span class="optional">(optional)</span></label>
+            <input class="field-input" type="tel" id="contactPhone" placeholder="+961 1 234 567"/>
+          </div>
+        </div>
+        <div class="field-hint" style="margin-top:-8px;margin-bottom:20px;">This is what students will see when they tap your listing — share at least one way to reach you.</div>
+
+        <label class="field-check">
+          <input type="checkbox" required/>
+          I confirm the information above is accurate and I agree to Connect's <a href="#">Sponsorship Terms</a>
+        </label>
+
+        <button type="submit" class="btn-submit" id="submitBtn">Submit application</button>
+
+        <div class="review-note">
+          <div class="review-note-icon">🛡️</div>
+          <div>Every sponsorship application is reviewed by our admin team before your business appears on the public Sponsors page — usually within a few days.</div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Success state -->
+    <div class="success-card" id="successView">
+      <div class="success-icon">✓</div>
+      <div class="success-title">Application submitted</div>
+      <p class="success-desc">Thanks for applying! Our admin team will review your details and reach out at the email you provided once your sponsorship is approved.</p>
+      <button class="btn-hero-ghost" style="color:var(--forest-mid);border-color:var(--border);" onclick="window.location.href='sponsors.html'">View current sponsors →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-logo">
+    <div class="logo-mark" style="background:#3DBA6F;width:8px;height:8px;border-radius:50%;"></div>
+    Connect
+  </div>
+  <div class="footer-copy">© 2025 Connect · Capstone project by Kevin Abdelnour</div>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+/* Navbar scroll */
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+
+/* Scroll reveal */
+const revealEls = document.querySelectorAll('.reveal, .reveal-left');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
+}, { threshold: 0.12 });
+revealEls.forEach(el => io.observe(el));
+
+/* Category card selection */
+document.querySelectorAll('#roleCards .role-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('#roleCards .role-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+  });
+});
+
+/* Logo upload preview */
+const uploadBox = document.getElementById('uploadBox');
+const logoInput = document.getElementById('logoUpload');
+const uploadFilename = document.getElementById('uploadFilename');
+logoInput.addEventListener('change', () => {
+  if (logoInput.files.length){
+    uploadBox.classList.add('has-file');
+    uploadFilename.textContent = '✓ ' + logoInput.files[0].name;
+  }
+});
+
+/* Submit → success state
+   TODO (backend): POST this form's fields to something like
+   /api/sponsors/apply — category, bizName, bizProof, productType,
+   description, logo file, contactEmail, contactPhone — then set
+   status to "pending" until an admin approves it (same approval
+   pattern as event submissions), at which point it appears on
+   sponsors.html.
+   Anti-spam TODO (backend): also verify contactEmail via a
+   confirmation link, add CAPTCHA, and rate-limit submissions by
+   IP/email before they ever reach the admin queue. */
+document.getElementById('sponsorForm').addEventListener('submit', () => {
+  // Honeypot check: a real user never sees or fills this field.
+  // If it has a value, the submission almost certainly came from a bot.
+  const honeypot = document.getElementById('website_hp').value;
+  if (honeypot.trim() !== ''){
+    console.log('Spam submission blocked (honeypot triggered).');
+    return; // silently drop — no success message, no admin queue entry
+  }
+  document.getElementById('formView').style.display = 'none';
+  document.getElementById('successView').style.display = 'block';
+  document.getElementById('successView').scrollIntoView({behavior:'smooth', block:'center'});
+});
+</script>
+</body>
+</html>

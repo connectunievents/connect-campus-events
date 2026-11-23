@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Connect — University Event Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../codes/access-control.js" defer></script>
+<script src="../codes/chat-widget.js" defer></script>
+<script src="../codes/micro-interactions.js" defer></script>
+<style>
+/* ── RESET & BASE ──────────────────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --forest:    #081C10;
+  --forest-mid:#0E3320;
+  --forest-lt: #16542F;
+  --leaf:      #3DBA6F;
+  --leaf-bright:#52D483;
+  --pale:      #C4EDD4;
+  --pale2:     #DFF2E8;
+  --white:     #FFFFFF;
+  --off-white: #F3FAF6;
+  --ink:       #060E09;
+  --ink-mid:   #1A2D20;
+  --muted:     #456050;
+  --border:    #B8D9C5;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Plus Jakarta Sans', sans-serif;
+}
+
+html{scroll-behavior:smooth;}
+body{background:var(--white);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.6;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+img{display:block;max-width:100%;}
+
+/* ── SCROLL ANIMATIONS ────────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-44px);transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1);}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(44px);transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1);}
+.reveal-right.visible{opacity:1;transform:translateX(0);}
+.delay-1{transition-delay:.1s;}
+.delay-2{transition-delay:.2s;}
+.delay-3{transition-delay:.3s;}
+.delay-4{transition-delay:.4s;}
+.delay-5{transition-delay:.5s;}
+
+/* ── NAVBAR ───────────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 56px;
+  transition:background .4s, box-shadow .4s, padding .4s;
+}
+nav.scrolled{
+  background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(12px);
+  box-shadow:0 1px 0 var(--border);
+  padding:14px 56px;
+}
+.logo{
+  font-family:var(--font-display);
+  font-weight:700;font-size:26px;
+  color:var(--white);
+  letter-spacing:-0.3px;
+  display:flex;align-items:center;gap:8px;
+  transition:color .4s;
+}
+nav.scrolled .logo{color:var(--ink);}
+.logo-mark{
+  width:10px;height:10px;border-radius:50%;
+  background:var(--leaf);
+  transition:transform .3s;
+}
+.logo:hover .logo-mark{transform:scale(1.4);}
+.nav-links{display:flex;gap:52px;}
+.nav-links a{
+  font-size:14px;font-weight:400;
+  color:rgba(255,255,255,0.75);
+  transition:color .3s;
+}
+nav.scrolled .nav-links a{color:var(--muted);}
+.nav-links a:hover{color:var(--white);}
+nav.scrolled .nav-links a:hover{color:var(--ink);}
+.nav-cta{display:flex;gap:10px;}
+.btn-ghost-nav{
+  background:none;
+  border:1px solid rgba(255,255,255,0.35);
+  color:var(--white);
+  padding:9px 20px;border-radius:8px;
+  font-size:13px;font-weight:400;cursor:pointer;
+  font-family:var(--font-body);
+  transition:all .3s;
+}
+nav.scrolled .btn-ghost-nav{border-color:var(--border);color:var(--muted);}
+.btn-ghost-nav:hover{background:rgba(255,255,255,0.12);}
+nav.scrolled .btn-ghost-nav:hover{background:var(--pale2);}
+.btn-fill-nav{
+  background:var(--white);color:var(--forest);
+  border:none;padding:9px 20px;border-radius:8px;
+  font-size:13px;font-weight:500;cursor:pointer;
+  font-family:var(--font-body);
+  transition:all .3s;
+}
+nav.scrolled .btn-fill-nav{background:var(--forest);color:var(--white);}
+.btn-fill-nav:hover{background:var(--pale);color:var(--forest-mid);}
+nav.scrolled .btn-fill-nav:hover{background:var(--forest-mid);}
+
+/* ── HERO ─────────────────────────────────────────────────── */
+.hero{
+  min-height:100vh;
+  background:var(--forest);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:120px 56px 80px;
+  position:relative;overflow:hidden;
+}
+/* Subtle organic texture */
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    radial-gradient(ellipse 800px 600px at 20% 50%, rgba(61,186,111,0.10) 0%, transparent 70%),
+    radial-gradient(ellipse 600px 400px at 80% 20%, rgba(82,212,131,0.07) 0%, transparent 60%);
+  pointer-events:none;
+}
+/* Decorative circles */
+.hero-deco{position:absolute;border-radius:50%;pointer-events:none;}
+.hero-deco-1{width:500px;height:500px;top:-160px;right:-120px;border:1px solid rgba(61,186,111,0.10);}
+.hero-deco-2{width:300px;height:300px;top:-60px;right:20px;border:1px solid rgba(61,186,111,0.06);}
+.hero-deco-3{width:200px;height:200px;bottom:60px;left:-60px;border:1px solid rgba(61,186,111,0.08);}
+.hero-inner{
+  max-width:1100px;width:100%;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:center;
+  position:relative;z-index:1;
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(61,186,111,0.14);
+  border:1px solid rgba(61,186,111,0.28);
+  color:var(--leaf-bright);
+  padding:5px 14px;border-radius:20px;
+  font-size:12px;font-weight:500;
+  letter-spacing:.3px;
+  margin-bottom:24px;
+}
+.tag-pulse{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--leaf);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+.hero h1{
+  font-family:var(--font-display);
+  font-size:72px;font-weight:700;
+  line-height:1.02;letter-spacing:-1.5px;
+  color:var(--white);
+  margin-bottom:22px;
+}
+.hero h1 em{
+  font-style:italic;
+  color:var(--leaf);
+}
+.hero-sub{
+  color:rgba(255,255,255,0.6);
+  font-size:17px;font-weight:300;
+  line-height:1.75;
+  max-width:440px;
+  margin-bottom:40px;
+}
+.hero-btns{display:flex;gap:12px;align-items:center;}
+.btn-hero-primary{
+  background:var(--white);color:var(--forest);
+  border:none;padding:14px 30px;border-radius:10px;
+  font-size:15px;font-weight:500;cursor:pointer;
+  font-family:var(--font-body);
+  transition:all .25s;
+}
+.btn-hero-primary:hover{background:var(--pale);transform:translateY(-2px);}
+.btn-hero-ghost{
+  background:none;
+  border:1px solid rgba(255,255,255,0.25);
+  color:rgba(255,255,255,0.8);
+  padding:14px 30px;border-radius:10px;
+  font-size:15px;cursor:pointer;
+  font-family:var(--font-body);
+  transition:all .25s;
+}
+.btn-hero-ghost:hover{border-color:rgba(255,255,255,0.5);color:var(--white);}
+
+/* ── HERO CARD MOCKUP ─────────────────────────────────────── */
+.hero-visual{position:relative;display:flex;justify-content:center;}
+.card-float{
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.14);
+  backdrop-filter:blur(20px);
+  border-radius:20px;
+  overflow:hidden;
+  width:320px;
+  animation:float 5s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.cf-header{
+  padding:16px 18px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.cf-uni{font-size:12px;font-weight:500;color:rgba(255,255,255,0.9);}
+.cf-badge{
+  font-size:10px;background:rgba(61,186,111,0.18);
+  border:1px solid rgba(61,186,111,0.28);
+  color:var(--leaf-bright);padding:2px 8px;border-radius:5px;
+}
+.cf-tabs{
+  display:flex;padding:0 18px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+}
+.cf-tab{
+  padding:10px 0;margin-right:18px;
+  font-size:11px;font-weight:500;
+  color:rgba(255,255,255,0.4);
+  border-bottom:2px solid transparent;
+}
+.cf-tab.active{color:var(--leaf-bright);border-bottom-color:var(--leaf-bright);}
+.cf-body{padding:14px;}
+.cf-label{font-size:9px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;}
+.cf-event{
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:12px;overflow:hidden;margin-bottom:8px;
+}
+.cf-img{
+  height:70px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-size:18px;font-weight:700;
+  letter-spacing:-0.5px;
+}
+.ci1{background:rgba(8,28,16,0.85);color:var(--leaf-bright);}
+.ci2{background:rgba(5,14,8,0.85);color:rgba(61,186,111,0.65);}
+.cf-info{padding:9px 11px;}
+.cf-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;}
+.cf-title{font-size:11px;font-weight:500;color:rgba(255,255,255,0.85);}
+.cf-price{font-size:10px;background:rgba(61,186,111,0.15);color:var(--leaf-bright);padding:2px 6px;border-radius:4px;}
+.cf-price.free{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.5);}
+.cf-meta{font-size:9px;color:rgba(255,255,255,0.35);}
+/* Floating notification */
+.notif-float{
+  position:absolute;bottom:-20px;left:-30px;
+  background:var(--white);
+  border-radius:12px;
+  padding:10px 14px;
+  box-shadow:0 16px 40px rgba(0,0,0,0.25);
+  display:flex;align-items:center;gap:8px;
+  animation:float 5s ease-in-out infinite .8s;
+  white-space:nowrap;
+}
+.notif-icon{font-size:18px;}
+.notif-text{font-size:12px;font-weight:500;color:var(--ink);}
+.notif-sub{font-size:10px;color:var(--muted);}
+/* Floating ticket */
+.ticket-float{
+  position:absolute;top:20px;right:-40px;
+  background:var(--forest-mid);
+  border:1px solid rgba(61,186,111,0.22);
+  border-radius:10px;padding:10px 14px;
+  box-shadow:0 16px 40px rgba(0,0,0,0.3);
+  animation:float 5s ease-in-out infinite 1.4s;
+  white-space:nowrap;
+}
+.tf-label{font-size:9px;color:var(--leaf-bright);text-transform:uppercase;letter-spacing:.5px;}
+.tf-val{font-size:13px;font-weight:600;color:var(--white);margin-top:2px;}
+
+/* ── SCROLL INDICATOR ─────────────────────────────────────── */
+.scroll-hint{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  color:rgba(255,255,255,0.35);font-size:11px;letter-spacing:.5px;
+}
+.scroll-line{
+  width:1px;height:40px;background:rgba(255,255,255,0.15);
+  position:relative;overflow:hidden;
+}
+.scroll-line::after{
+  content:'';position:absolute;top:-100%;left:0;
+  width:1px;height:100%;background:var(--leaf);
+  animation:scrollDown 1.8s ease-in-out infinite;
+}
+@keyframes scrollDown{0%{top:-100%}100%{top:200%}}
+
+/* ── UNIVERSITIES STRIP ───────────────────────────────────── */
+.unis-strip{
+  padding:28px 56px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:24px;
+  background:var(--off-white);
+}
+.unis-label{font-size:12px;color:var(--muted);white-space:nowrap;font-weight:400;}
+.unis-list{display:flex;gap:12px;flex-wrap:wrap;}
+.uni-pill{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:7px;padding:7px 16px;
+  font-size:12px;color:var(--muted);
+  transition:all .2s;
+}
+.uni-pill:hover{border-color:var(--forest-lt);color:var(--forest-mid);}
+
+/* ── FEATURES ─────────────────────────────────────────────── */
+.features{
+  padding:100px 56px;
+  max-width:1200px;margin:0 auto;
+}
+.section-eyebrow{
+  font-size:11px;font-weight:500;
+  color:var(--leaf);letter-spacing:1.5px;text-transform:uppercase;
+  margin-bottom:14px;
+}
+.section-heading{
+  font-family:var(--font-display);
+  font-size:48px;font-weight:700;
+  line-height:1.08;letter-spacing:-1px;
+  color:var(--ink);
+  margin-bottom:12px;
+}
+.section-heading em{font-style:italic;color:var(--forest-mid);}
+.section-sub{
+  color:var(--muted);font-size:16px;font-weight:300;
+  max-width:460px;margin-bottom:56px;line-height:1.7;
+}
+.features-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+.feat{
+  background:var(--off-white);border:1px solid var(--border);
+  border-radius:16px;padding:28px;
+  transition:border-color .25s, transform .25s, box-shadow .25s;
+  cursor:default;
+}
+.feat:hover{
+  border-color:var(--forest-lt);
+  transform:translateY(-4px);
+  box-shadow:0 16px 40px rgba(30,77,53,0.08);
+}
+.feat-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:var(--pale);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;margin-bottom:18px;
+  transition:background .25s;
+}
+.feat:hover .feat-icon{background:var(--pale2);}
+.feat-title{
+  font-family:var(--font-display);font-size:20px;font-weight:600;
+  color:var(--ink);margin-bottom:8px;letter-spacing:-.3px;
+}
+.feat-desc{font-size:14px;color:var(--muted);line-height:1.7;font-weight:300;}
+
+/* ── PAYMENT SECTION ──────────────────────────────────────── */
+.payment-section{
+  background:var(--off-white);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:72px 56px;
+}
+.payment-inner{
+  max-width:1100px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:center;
+}
+.payment-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--pale);border:1px solid var(--border);
+  color:var(--forest-mid);padding:5px 14px;border-radius:20px;
+  font-size:12px;font-weight:500;letter-spacing:.3px;margin-bottom:20px;
+}
+.payment-section .section-heading{font-size:40px;margin-bottom:12px;}
+.payment-section .section-sub{margin-bottom:0;font-size:15px;}
+.pay-cards{display:flex;flex-direction:column;gap:12px;}
+.pay-card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:14px;padding:20px 22px;
+  display:flex;align-items:center;gap:16px;
+  transition:border-color .25s, box-shadow .25s, transform .25s;
+}
+.pay-card:hover{
+  border-color:var(--forest-lt);
+  box-shadow:0 8px 28px rgba(30,77,53,0.08);
+  transform:translateY(-2px);
+}
+.pay-logo{
+  width:52px;height:52px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;letter-spacing:.5px;
+  flex-shrink:0;
+}
+.pay-logo-wish{background:#FF6B35;color:#fff;}
+.pay-logo-omt{background:#003087;color:#fff;}
+.pay-info{flex:1;}
+.pay-name{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:3px;}
+.pay-desc{font-size:13px;color:var(--muted);font-weight:300;}
+.pay-check{
+  width:24px;height:24px;border-radius:50%;
+  background:var(--pale);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:var(--forest-mid);flex-shrink:0;
+}
+.pay-note{
+  margin-top:14px;padding:14px 18px;
+  background:var(--pale);border:1px solid var(--border);
+  border-radius:10px;
+  font-size:13px;color:var(--forest);font-weight:400;line-height:1.6;
+}
+.pay-note strong{font-weight:600;}
+
+/* ── HOW IT WORKS ─────────────────────────────────────────── */
+.how{
+  background:var(--forest);
+  padding:100px 56px;
+  position:relative;overflow:hidden;
+}
+.how::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 700px 500px at 80% 50%, rgba(61,186,111,0.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.how-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1;}
+.how .section-eyebrow{color:var(--leaf-bright);}
+.how .section-heading{color:var(--white);}
+.how .section-heading em{color:var(--leaf-bright);}
+.steps{display:flex;flex-direction:column;gap:0;}
+.step{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:center;
+  padding:60px 0;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.step:last-child{border-bottom:none;}
+.step-reverse .step-text{order:2;}
+.step-reverse .step-visual{order:1;}
+.step-num{
+  font-family:var(--font-display);
+  font-size:80px;font-weight:700;
+  color:rgba(61,186,111,0.13);
+  line-height:1;margin-bottom:8px;
+  letter-spacing:-3px;
+}
+.step-title{
+  font-family:var(--font-display);
+  font-size:34px;font-weight:600;
+  color:var(--white);letter-spacing:-.5px;
+  margin-bottom:12px;
+}
+.step-title em{font-style:italic;color:var(--leaf-bright);}
+.step-desc{
+  font-size:15px;font-weight:300;
+  color:rgba(255,255,255,0.55);
+  line-height:1.8;max-width:380px;
+}
+.step-visual{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;
+  padding:28px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.sv-row{
+  display:flex;align-items:center;gap:12px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:10px;padding:12px 14px;
+}
+.sv-dot{
+  width:32px;height:32px;border-radius:8px;
+  background:rgba(61,186,111,0.14);
+  border:1px solid rgba(61,186,111,0.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;
+}
+.sv-text{font-size:13px;color:rgba(255,255,255,0.75);}
+.sv-sub{font-size:11px;color:rgba(255,255,255,0.3);margin-top:2px;}
+.sv-badge{
+  margin-left:auto;font-size:10px;
+  background:rgba(61,186,111,0.15);
+  color:var(--leaf-bright);border:1px solid rgba(61,186,111,0.22);
+  padding:2px 8px;border-radius:4px;white-space:nowrap;
+}
+.sv-badge.free{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.4);border-color:rgba(255,255,255,0.08);}
+
+/* QR card */
+.qr-card{
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;gap:16px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;
+}
+.qr-box{
+  width:80px;height:80px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(61,186,111,0.22);
+  border-radius:10px;
+  display:grid;grid-template-columns:repeat(5,1fr);
+  grid-template-rows:repeat(5,1fr);
+  gap:3px;padding:8px;
+}
+.qr-box div{border-radius:1px;}
+.qr-info{flex:1;}
+.qr-event{font-size:13px;font-weight:500;color:var(--white);margin-bottom:4px;}
+.qr-date{font-size:11px;color:var(--leaf-bright);}
+.qr-status{
+  font-size:10px;margin-top:8px;
+  background:rgba(61,186,111,0.15);
+  color:var(--leaf-bright);
+  border:1px solid rgba(61,186,111,0.22);
+  border-radius:5px;padding:3px 8px;display:inline-block;
+}
+
+/* Email card */
+.email-card{
+  background:var(--white);border-radius:12px;
+  padding:20px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.15);
+}
+.ec-from{font-size:11px;color:var(--muted);margin-bottom:4px;}
+.ec-subject{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:8px;}
+.ec-body{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:12px;}
+.ec-btn{
+  background:var(--forest);color:var(--white);
+  border:none;border-radius:7px;padding:8px 16px;
+  font-size:12px;font-weight:500;width:100%;text-align:center;cursor:pointer;
+}
+
+/* ── CTA ──────────────────────────────────────────────────── */
+.cta-section{
+  padding:100px 56px;
+  background:var(--pale2);
+  border-top:1px solid var(--border);
+  text-align:center;
+}
+.cta-inner{max-width:580px;margin:0 auto;}
+.cta-section .section-heading{margin-bottom:16px;}
+.cta-section .section-sub{margin:0 auto 36px;max-width:420px;}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-cta-primary{
+  background:var(--forest);color:var(--white);
+  border:none;padding:15px 32px;border-radius:10px;
+  font-size:15px;font-weight:500;cursor:pointer;
+  font-family:var(--font-body);
+  transition:all .25s;
+}
+.btn-cta-primary:hover{background:var(--forest-mid);transform:translateY(-2px);}
+.btn-cta-ghost{
+  background:none;border:1px solid var(--border);
+  color:var(--muted);
+  padding:15px 32px;border-radius:10px;
+  font-size:15px;cursor:pointer;
+  font-family:var(--font-body);
+  transition:all .25s;
+}
+.btn-cta-ghost:hover{border-color:var(--forest-lt);color:var(--forest-mid);}
+.cta-note{font-size:12px;color:var(--muted);margin-top:18px;}
+
+/* ── FOOTER ───────────────────────────────────────────────── */
+footer{
+  background:var(--ink);
+  padding:40px 56px;
+  display:flex;align-items:center;
+  justify-content:space-between;
+}
+.footer-logo{
+  font-family:var(--font-display);font-size:20px;font-weight:700;
+  color:var(--white);display:flex;align-items:center;gap:8px;
+}
+.footer-copy{font-size:12px;color:rgba(255,255,255,0.3);}
+.footer-links{display:flex;gap:24px;}
+.footer-links a{font-size:12px;color:rgba(255,255,255,0.35);transition:color .2s;}
+.footer-links a:hover{color:var(--leaf);}
+/* Shared navigation: keep every destination reachable on narrow screens. */
+@media (max-width:760px){
+  nav{padding:16px 24px;flex-wrap:wrap;gap:14px;}
+  .nav-links{order:3;width:100%;gap:18px;overflow-x:auto;padding-bottom:4px;}
+  .nav-links a{white-space:nowrap;}
+  .nav-cta{margin-left:auto;}
+  .btn-ghost-nav,.btn-fill-nav{padding:8px 12px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────── -->
+<nav id="navbar">
+  <a href="index.html" class="logo" aria-label="Connect home">
+    <div class="logo-mark"></div>
+    Connect
+  </a>
+  <div class="nav-links">
+    <a href="index.html" class="active">Home</a>
+    <a href="explore-events.html">Explore events</a>
+    <a href="sponsors.html" data-student-only hidden>Sponsors</a>
+    <a href="become-a-sponsor.html">Become a sponsor</a>
+    <a href="about.html">About</a>
+  </div>
+  <div class="nav-cta">
+    <button class="btn-ghost-nav" onclick="window.location.href='login.html'">Log in</button>
+    <button class="btn-fill-nav" onclick="window.location.href='signup.html'">Sign up free</button>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────── -->
+<section class="hero" id="hero">
+  <div class="hero-deco hero-deco-1"></div>
+  <div class="hero-deco hero-deco-2"></div>
+  <div class="hero-deco hero-deco-3"></div>
+
+  <div class="hero-inner">
+    <!-- Left -->
+    <div class="hero-text">
+      <div class="hero-tag">
+        <div class="tag-pulse"></div>
+        Now live at LAU, AUB &amp; NDU
+      </div>
+      <h1>
+        Your campus,<br>
+        all in one<br>
+        <em>place.</em>
+      </h1>
+      <p class="hero-sub">
+        Connect brings every university event, workshop, and seminar to one trusted platform. Register, get your ticket, show up — done.
+      </p>
+      <div class="hero-btns">
+        <button class="btn-hero-primary" onclick="window.location.href='explore-events.html'">Browse events</button>
+        <button class="btn-hero-ghost">For organizers →</button>
+      </div>
+    </div>
+
+    <!-- Right: Phone mockup -->
+    <div class="hero-visual">
+      <div class="card-float">
+        <div class="cf-header">
+          <div>
+            <div class="cf-uni">LAU · Beirut Campus</div>
+          </div>
+          <div class="cf-badge">Verified ✓</div>
+        </div>
+        <div class="cf-tabs">
+          <div class="cf-tab active">Events</div>
+          <div class="cf-tab">Workshops</div>
+          <div class="cf-tab">My tickets</div>
+        </div>
+        <div class="cf-body">
+          <div class="cf-label">This week</div>
+          <div class="cf-event">
+            <div class="cf-img ci1">HALL HORRORS</div>
+            <div class="cf-info">
+              <div class="cf-row">
+                <span class="cf-title">Costume Competition Night</span>
+                <span class="cf-price">$10</span>
+              </div>
+              <div class="cf-meta">Thu 27 Oct · LAU Music Club</div>
+            </div>
+          </div>
+          <div class="cf-event">
+            <div class="cf-img ci2">UX TALK</div>
+            <div class="cf-info">
+              <div class="cf-row">
+                <span class="cf-title">Design Thinking Workshop</span>
+                <span class="cf-price free">Free</span>
+              </div>
+              <div class="cf-meta">Fri 28 Oct · AKSOB · All universities</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Floating elements -->
+      <div class="notif-float">
+        <div class="notif-icon">🎟</div>
+        <div>
+          <div class="notif-text">You're registered!</div>
+          <div class="notif-sub">QR ticket sent to your email</div>
+        </div>
+      </div>
+      <div class="ticket-float">
+        <div class="tf-label">Attendance</div>
+        <div class="tf-val">142 / 200</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ── UNIVERSITIES STRIP ──────────────────────────────────── -->
+<div class="unis-strip">
+  <span class="unis-label">Trusted by</span>
+  <div class="unis-list">
+    <div class="uni-pill">Lebanese American University</div>
+    <div class="uni-pill">American University of Beirut</div>
+    <div class="uni-pill">Notre Dame University</div>
+    <div class="uni-pill">Université Saint-Joseph</div>
+    <div class="uni-pill">+ more coming</div>
+  </div>
+</div>
+
+<!-- ── FEATURES ───────────────────────────────────────────── -->
+<section class="features">
+  <div class="reveal">
+    <div class="section-eyebrow">Features</div>
+    <h2 class="section-heading">Everything you need,<br><em>nothing you don't.</em></h2>
+    <p class="section-sub">Built around how campus life actually works — not how commercial event platforms think it does.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feat reveal delay-1">
+      <div class="feat-icon">🎟</div>
+      <div class="feat-title">Digital QR tickets</div>
+      <p class="feat-desc">Register for an event and instantly get a QR code in your inbox. No printing, no booths, no chaos at the door.</p>
+    </div>
+    <div class="feat reveal delay-2">
+      <div class="feat-icon">🔒</div>
+      <div class="feat-title">University-only access</div>
+      <p class="feat-desc">Private events stay private. Only students with a verified university email can see and join internal events.</p>
+    </div>
+    <div class="feat reveal delay-3">
+      <div class="feat-icon">📊</div>
+      <div class="feat-title">Organizer dashboard</div>
+      <p class="feat-desc">See who registered, scan attendees at the door, and get a post-event summary — all in one place.</p>
+    </div>
+    <div class="feat reveal delay-1">
+      <div class="feat-icon">🔔</div>
+      <div class="feat-title">Smart notifications</div>
+      <p class="feat-desc">Automatic reminders before events and instant waitlist alerts when a spot opens up.</p>
+    </div>
+    <div class="feat reveal delay-2">
+      <div class="feat-icon">🌐</div>
+      <div class="feat-title">Cross-university discovery</div>
+      <p class="feat-desc">Find public events from other universities too. Great talks don't stop at your campus gates.</p>
+    </div>
+    <div class="feat reveal delay-3">
+      <div class="feat-icon">✅</div>
+      <div class="feat-title">Admin approval flow</div>
+      <p class="feat-desc">Every event is reviewed before going live. Admins keep quality high and the platform trustworthy.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── PAYMENT SECTION ─────────────────────────────────────── -->
+<section class="payment-section">
+  <div class="payment-inner">
+    <div class="reveal-left">
+      <div class="payment-tag">💳 Payments</div>
+      <h2 class="section-heading">Pay the way<br><em>Lebanon pays.</em></h2>
+      <p class="section-sub">No international cards, no friction. Paid events on Connect are settled through the payment methods Lebanese students already use every day — Wish and OMT.</p>
+    </div>
+    <div class="pay-cards reveal-right">
+      <div class="pay-card">
+        <div class="pay-logo pay-logo-wish">WISH</div>
+        <div class="pay-info">
+          <div class="pay-name">Wish Money</div>
+          <div class="pay-desc">Pay instantly from your Wish wallet — fast, local, and cashless.</div>
+        </div>
+        <div class="pay-check">✓</div>
+      </div>
+      <div class="pay-card">
+        <div class="pay-logo pay-logo-omt">OMT</div>
+        <div class="pay-info">
+          <div class="pay-name">OMT</div>
+          <div class="pay-desc">Settle your ticket through any OMT agent or the OMT app in seconds.</div>
+        </div>
+        <div class="pay-check">✓</div>
+      </div>
+      <div class="pay-note">
+        <strong>Free events</strong> require no payment at all — just register and your QR ticket is sent instantly. Payment is only triggered for paid events.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ────────────────────────────────────────── -->
+<section class="how">
+  <div class="how-inner">
+    <div class="reveal">
+      <div class="section-eyebrow">How it works</div>
+      <h2 class="section-heading">Simple from<br><em>day one.</em></h2>
+    </div>
+
+    <div class="steps">
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-text reveal-left">
+          <div class="step-num">01</div>
+          <h3 class="step-title">Sign in with your<br><em>university email</em></h3>
+          <p class="step-desc">Your email domain is your identity on Connect. It tells the platform which university you belong to and what events you can see — automatically.</p>
+        </div>
+        <div class="step-visual reveal-right">
+          <div class="email-card">
+            <div class="ec-from">From: connect@uni.edu.lb</div>
+            <div class="ec-subject">Verify your university account</div>
+            <div class="ec-body">Hi — tap below to verify your @uni.edu.lb email and unlock all university private events.</div>
+            <div class="ec-btn">Verify my email →</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step step-reverse">
+        <div class="step-visual reveal-left">
+          <div class="sv-row">
+            <div class="sv-dot">🎭</div>
+            <div>
+              <div class="sv-text">Hall of Horrors Night</div>
+              <div class="sv-sub">Thu 27 Oct · LAU</div>
+            </div>
+            <div class="sv-badge">$10</div>
+          </div>
+          <div class="sv-row">
+            <div class="sv-dot">💡</div>
+            <div>
+              <div class="sv-text">Design Thinking Workshop</div>
+              <div class="sv-sub">Fri 28 Oct · AUB · Public</div>
+            </div>
+            <div class="sv-badge free">Free</div>
+          </div>
+          <div class="sv-row">
+            <div class="sv-dot">🚀</div>
+            <div>
+              <div class="sv-text">Startup Pitch Night</div>
+              <div class="sv-sub">Tue 31 Oct · NDU</div>
+            </div>
+            <div class="sv-badge">$5</div>
+          </div>
+        </div>
+        <div class="step-text reveal-right">
+          <div class="step-num">02</div>
+          <h3 class="step-title">Browse &amp; <em>register</em><br>for events</h3>
+          <p class="step-desc">See upcoming events from your university and beyond. Register with one click and your QR ticket arrives instantly in your email.</p>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-text reveal-left">
+          <div class="step-num">03</div>
+          <h3 class="step-title">Show up —<br><em>QR does the rest</em></h3>
+          <p class="step-desc">At the door, the organizer scans your QR code. You're marked as attended in real time. No paper, no lines, no stress.</p>
+        </div>
+        <div class="step-visual reveal-right">
+          <div class="qr-card">
+            <div class="qr-box" id="qrbox"></div>
+            <div class="qr-info">
+              <div class="qr-event">Hall of Horrors Night</div>
+              <div class="qr-date">Thu 27 Oct, 8:00 PM · LAU</div>
+              <div class="qr-status">✓ Valid ticket</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ────────────────────────────────────────────────── -->
+<section class="cta-section">
+  <div class="cta-inner reveal">
+    <div class="section-eyebrow">Get started</div>
+    <h2 class="section-heading">Ready to find your<br><em>next event?</em></h2>
+    <p class="section-sub">Browse public events from universities across Lebanon. Sign in with your university email to unlock private events for your campus.</p>
+    <div class="cta-btns">
+      <button class="btn-cta-primary" onclick="window.location.href='signup.html'">Get started — it's free</button>
+      <button class="btn-cta-ghost" onclick="document.getElementById('hero').scrollIntoView({behavior:'smooth'})">See public events</button>
+    </div>
+    <p class="cta-note">All events displayed here are public · Sign in with your university email to check private events for your campus</p>
+  </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-logo">
+    <div class="logo-mark" style="background:#3DBA6F;width:8px;height:8px;border-radius:50%;"></div>
+    Connect
+  </div>
+  <div class="footer-copy">© 2025 Connect · Capstone project by Kevin Abdelnour</div>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+/* ── Navbar scroll ─────────────────────────────────────────── */
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+/* ── Scroll reveal (Intersection Observer) ─────────────────── */
+const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => io.observe(el));
+
+/* ── Build QR pattern ──────────────────────────────────────── */
+const qb = document.getElementById('qrbox');
+if (qb) {
+  const pattern = [1,1,1,0,1,1,0,0,1,1,1,0,1,0,1,0,1,1,0,0,1,1,1,0,1];
+  pattern.forEach(v => {
+    const d = document.createElement('div');
+    d.style.background = v ? 'rgba(61,186,111,0.85)' : 'transparent';
+    qb.appendChild(d);
+  });
+}
+
+/* ── Hero parallax ─────────────────────────────────────────── */
+const hero = document.getElementById('hero');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (y < window.innerHeight) {
+    hero.style.backgroundPositionY = (y * 0.3) + 'px';
+    const heroText = hero.querySelector('.hero-text');
+    if (heroText) heroText.style.transform = `translateY(${y * 0.1}px)`;
+  }
+}, { passive: true });
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+-- Compatibility note for the earlier frontend-only prototype.
+-- Do not recreate the obsolete sponsor table that used `name` and `status`.
+-- The active schema is in ../../connect_backup.sql and uses `business_name`
+-- and `is_active`. Apply migrations/20260905_connect_backend.sql for the
+-- server-backed application. Existing Row Level Security remains enabled.

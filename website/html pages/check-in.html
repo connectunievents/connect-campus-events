@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Organizer check-in — Connect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://unpkg.com/html5-qrcode" defer></script>
+  <script src="../codes/access-control.js" defer></script>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#f5faf7;color:#060e09;font-family:'Plus Jakarta Sans',sans-serif}nav{height:72px;padding:0 6vw;background:#fff;border-bottom:1px solid #d8e7de;display:flex;align-items:center;justify-content:space-between}.logo{font:700 25px 'Playfair Display',serif;color:#081c10;text-decoration:none}.back{color:#16542f;text-decoration:none;font-size:13px;font-weight:700}main{width:min(720px,calc(100% - 32px));margin:48px auto}.eyebrow{color:#3dba6f;text-transform:uppercase;font-size:11px;letter-spacing:1.5px;font-weight:700}h1{font:700 clamp(34px,7vw,52px)/1.05 'Playfair Display',serif;margin:10px 0}p{color:#607466;line-height:1.7}.panel{margin-top:28px;background:#fff;border:1px solid #d8e7de;border-radius:18px;padding:26px;box-shadow:0 16px 35px rgba(8,28,16,.08)}#reader{overflow:hidden;border-radius:12px}.manual{display:flex;gap:8px;margin-top:20px}.manual input{flex:1;min-width:0;padding:12px;border:1px solid #b8d9c5;border-radius:9px}.manual button,#startScanner{border:0;background:#081c10;color:#fff;padding:12px 18px;border-radius:9px;font-weight:700;cursor:pointer}.status{margin-top:18px;padding:14px;border-radius:10px;background:#f5faf7;display:none}.status.success{display:block;background:#dff2e8;color:#0e3320}.status.error{display:block;background:#fff0f0;color:#8a1c1c}@media(max-width:550px){.manual{flex-direction:column}}
+  </style>
+</head>
+<body><nav><a class="logo" href="index.html">● Connect</a><a class="back" href="explore-events.html">← Explore events</a></nav>
+<main><div class="eyebrow">Organizer tools</div><h1>Scan attendee tickets.</h1><p>Camera scanning and check-in are restricted by the server to organizers for their own events and to administrators.</p>
+  <section class="panel"><button id="startScanner">Open camera scanner</button><div id="reader"></div><form class="manual" id="manualForm"><input id="ticketToken" autocomplete="off" placeholder="Or paste a QR token" aria-label="Ticket token"/><button>Check in</button></form><div class="status" id="status" aria-live="polite"></div></section>
+</main>
+<script>
+window.addEventListener('DOMContentLoaded', async () => {
+  const status = document.getElementById('status'); let scanner;
+  function show(message, type){ status.textContent = message; status.className = `status ${type}`; }
+  try { const me = await ConnectAccess.api('/api/auth/me'); if (!['organizer','admin'].includes(me.data.profile.role)) throw new Error('Organizer or administrator access is required.'); }
+  catch (error) { show(error.message, 'error'); document.getElementById('startScanner').disabled = true; if (error.status === 401) setTimeout(() => location.href = `login.html?next=${encodeURIComponent(location.href)}`, 1000); return; }
+  async function checkIn(token){
+    show('Checking ticket…', 'success');
+    try { const result = await ConnectAccess.api('/api/checkin', { method:'POST', body:JSON.stringify({ token }) }); show(result.message, 'success'); }
+    catch (error) { show(error.message, 'error'); }
+  }
+  document.getElementById('manualForm').addEventListener('submit', (event) => { event.preventDefault(); const token = document.getElementById('ticketToken').value.trim(); if (token) checkIn(token); });
+  document.getElementById('startScanner').addEventListener('click', async () => {
+    if (!window.Html5Qrcode) return show('Scanner library did not load. Paste the ticket token below.', 'error');
+    if (scanner) return;
+    scanner = new Html5Qrcode('reader');
+    try { await scanner.start({ facingMode:'environment' }, { fps:10, qrbox:{ width:250, height:250 } }, async (token) => { await scanner.pause(true); await checkIn(token); setTimeout(() => scanner.resume(), 1500); }); }
+    catch { scanner = null; show('Camera access failed. Allow camera permission or paste the token below.', 'error'); }
+  });
+});
+</script></body></html>
