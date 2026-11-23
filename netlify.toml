@@ -1,0 +1,9 @@
+# Netlify build settings. The Next.js app lives in ./app.
+[build]
+  base = "app"
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NEXT_TELEMETRY_DISABLED = "1"
