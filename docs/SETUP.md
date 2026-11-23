@@ -41,6 +41,7 @@ Do these in order. Total time ≈ 45 minutes. Everything has a free tier.
 3. **Certificates & secrets → New client secret** → copy the **Value** (shown once).
 4. **Token configuration → Add optional claim → ID → `email`** (and accept the Graph permission prompt).
 5. Supabase **Authentication → Sign In / Providers → Azure** → enable, paste Client ID + Secret.
+   Then set `NEXT_PUBLIC_AUTH_MICROSOFT=1` (in `.env.local` and on Vercel) to show the Microsoft button.
    Azure Tenant URL: leave empty (or `https://login.microsoftonline.com/common`). Save.
 
 > Some universities block third-party apps for their students' Microsoft accounts. If a student sees

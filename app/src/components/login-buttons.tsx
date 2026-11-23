@@ -65,11 +65,20 @@ export function LoginButtons({ next }: { next: string }) {
       <button onClick={() => oauth("google")} disabled={!!busy} className={`${base} bg-white text-[#1f1f1f]`}>
         {busy === "google" ? <Loader2 className="animate-spin" size={20} /> : <GoogleIcon />} Continue with Google
       </button>
-      <button onClick={() => oauth("azure")} disabled={!!busy} className={`${base} bg-[#2f2f2f] text-white`}>
-        {busy === "azure" ? <Loader2 className="animate-spin" size={20} /> : <MicrosoftIcon />} Continue with Microsoft
-      </button>
+      {/* Live once the Azure provider is configured in Supabase (docs/SETUP.md §3); "Coming soon" until then. */}
+      {process.env.NEXT_PUBLIC_AUTH_MICROSOFT === "1" ? (
+        <button onClick={() => oauth("azure")} disabled={!!busy} className={`${base} bg-[#2f2f2f] text-white`}>
+          {busy === "azure" ? <Loader2 className="animate-spin" size={20} /> : <MicrosoftIcon />} Continue with Microsoft
+        </button>
+      ) : (
+        <button disabled aria-disabled className={`${base} cursor-not-allowed bg-[#2f2f2f] text-white/60`} title="Microsoft sign-in is coming soon">
+          <MicrosoftIcon /> Continue with Microsoft
+          <span className="rounded-full bg-warn/20 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-warn">Coming soon</span>
+        </button>
+      )}
 
-      {showEmail ? (
+      {/* Email magic link is off for now; set NEXT_PUBLIC_AUTH_EMAIL=1 to offer it. */}
+      {process.env.NEXT_PUBLIC_AUTH_EMAIL !== "1" ? null : showEmail ? (
         <form onSubmit={magic} className="space-y-3 pt-2">
           <input
             type="email"
