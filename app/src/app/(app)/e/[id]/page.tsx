@@ -43,6 +43,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
   const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([e.venue, e.campus, e.universities.name].filter(Boolean).join(", "))}`;
 
   return (
+    <>
     <main className="animate-fade-up pb-40">
       <div className="relative aspect-[4/3] w-full overflow-hidden md:aspect-[16/8]">
         {e.cover_url ? (
@@ -130,14 +131,15 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
       <div className="my-8">
         <SponsorStrip sponsors={sponsors} title="Presented with" />
       </div>
-
-      <TicketPicker
-        eventId={e.id}
-        types={types}
-        signedIn={Boolean(user)}
-        disabled={e.status !== "published" || ended}
-        disabledReason={e.status === "cancelled" ? "Cancelled" : ended ? "Event ended" : "Not on sale"}
-      />
     </main>
+    {/* Outside <main>: its entrance animation uses transform, which would trap position:fixed. */}
+    <TicketPicker
+      eventId={e.id}
+      types={types}
+      signedIn={Boolean(user)}
+      disabled={e.status !== "published" || ended}
+      disabledReason={e.status === "cancelled" ? "Cancelled" : ended ? "Event ended" : "Not on sale"}
+    />
+    </>
   );
 }

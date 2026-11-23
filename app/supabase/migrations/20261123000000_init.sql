@@ -1,7 +1,7 @@
 -- =====================================================================
 -- Connect — initial schema
 -- Multi-university events, ticketing, gate scanning, sponsors.
--- Run in a NEW Supabase project (SQL editor or `supabase db push`).
+-- Run in a NEW Supabase project (SQL editor or "supabase db push").
 -- =====================================================================
 
 create extension if not exists pgcrypto;
@@ -249,6 +249,15 @@ create or replace function public.touch_updated_at()
 returns trigger language plpgsql as $$ begin new.updated_at = now(); return new; end $$;
 create trigger events_touch before update on public.events for each row execute function public.touch_updated_at();
 
+-- ---------- API access (RLS below decides which rows) -----------------
+-- Explicit grants so the schema works even when "auto-expose new tables" is off.
+grant usage on schema public to anon, authenticated;
+grant select on public.universities, public.events, public.ticket_types, public.sponsors to anon;
+grant insert on public.sponsor_inquiries to anon;
+grant select, insert, update, delete on all tables in schema public to authenticated;
+grant all on all tables in schema public to service_role;
+grant usage, select on all sequences in schema public to authenticated, service_role;
+
 -- ---------- Row Level Security ----------------------------------------
 alter table public.profiles            enable row level security;
 alter table public.universities        enable row level security;
@@ -481,6 +490,7 @@ grant execute on function public.fail_order(uuid) to service_role;
 create or replace function public.check_in_ticket(p_code text, p_event uuid, p_scanner uuid, p_raw text)
 returns table (result public.scan_result, ticket_id uuid, holder_name text, ticket_type text, checked_in_at timestamptz)
 language plpgsql security definer set search_path = public as $$
+#variable_conflict use_column
 declare t public.tickets%rowtype; tt_name text; r public.scan_result;
 begin
   select * into t from public.tickets where code = upper(p_code) for update;
@@ -513,6 +523,7 @@ select e.id as event_id, e.university_id,
   (select count(*) from public.tickets k where k.event_id = e.id and k.status = 'used')::int as checked_in,
   coalesce((select sum(amount_cents) from public.orders o where o.event_id = e.id and o.status = 'paid'), 0)::bigint as revenue_cents
 from public.events e;
+grant select on public.event_stats to authenticated, service_role;
 
 -- Realtime for live check-in counters.
 alter publication supabase_realtime add table public.check_ins;
