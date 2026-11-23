@@ -5,9 +5,10 @@ import { ArrowLeft, Globe, MapPin, CalendarX2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentUser, getMemberships } from "@/lib/auth";
 import { getFollowedIds, listEvents, listSponsors } from "@/lib/queries";
-import { isLive } from "@/lib/format";
+import { isLiveEvent } from "@/lib/format";
 import { EventPoster, EventRow } from "@/components/event-card";
 import { FollowButton } from "@/components/follow-button";
+import { UniLogo } from "@/components/uni-logo";
 import { EmptyState, Rail, SectionHeader, buttonClass } from "@/components/ui";
 import { SponsorStrip } from "@/components/sponsor-strip";
 import type { University } from "@/lib/types";
@@ -34,8 +35,8 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
     getMemberships(),
   ]);
   const isStaff = memberships.some((m) => m.universities.slug === slug);
-  const live = events.filter((e) => isLive(e.starts_at, e.ends_at));
-  const rest = events.filter((e) => !isLive(e.starts_at, e.ends_at));
+  const live = events.filter((e) => isLiveEvent(e));
+  const rest = events.filter((e) => !isLiveEvent(e));
   const color = uni.brand_color ?? "#16542F";
 
   return (
@@ -54,12 +55,7 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
 
       <section className="relative -mt-14 px-4">
         <div className="flex items-end justify-between gap-3">
-          <span
-            className="flex h-20 w-20 items-center justify-center rounded-2xl border-4 border-base text-lg font-extrabold text-white shadow-xl"
-            style={{ background: `linear-gradient(145deg, ${color}, #07130c)` }}
-          >
-            {uni.short_name ?? uni.name.slice(0, 3)}
-          </span>
+          <UniLogo uni={uni} size={84} className="ring-4 ring-base" />
           <FollowButton universityId={uni.id} initial={followed.includes(uni.id)} signedIn={Boolean(user)} />
         </div>
         <h1 className="mt-3 text-2xl font-bold leading-tight">{uni.name}</h1>

@@ -3,11 +3,12 @@ import Image from "next/image";
 import { Search, Sparkles, CalendarDays } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
 import { getFollowedIds, listEvents, listSponsors, searchUniversities } from "@/lib/queries";
-import { isLive, nowMs } from "@/lib/format";
+import { isLiveEvent, nowMs } from "@/lib/format";
 import { EventPoster, EventRow } from "@/components/event-card";
 import { Rail, SectionHeader, EmptyState, buttonClass } from "@/components/ui";
 import { SponsorStrip } from "@/components/sponsor-strip";
 import { Wordmark } from "@/components/logo";
+import { UniLogo } from "@/components/uni-logo";
 import { CATEGORIES } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -27,8 +28,8 @@ export default async function HomePage() {
   ]);
 
   const now = nowMs();
-  const live = allEvents.filter((e) => isLive(e.starts_at, e.ends_at, now));
-  const upcoming = allEvents.filter((e) => !isLive(e.starts_at, e.ends_at, now));
+  const live = allEvents.filter((e) => isLiveEvent(e, now));
+  const upcoming = allEvents.filter((e) => !isLiveEvent(e, now));
   const mine = followed.length ? upcoming.filter((e) => followed.includes(e.university_id)) : [];
   const thisWeek = upcoming.filter((e) => new Date(e.starts_at).getTime() - now < 7 * 86400_000);
   const firstName = user?.fullName?.split(" ")[0];
@@ -108,12 +109,7 @@ export default async function HomePage() {
               href={`/u/${u.slug}`}
               className="flex w-24 shrink-0 snap-start flex-col items-center gap-2 text-center"
             >
-              <span
-                className="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 text-sm font-extrabold text-white shadow-lg"
-                style={{ background: `linear-gradient(145deg, ${u.brand_color ?? "#16542F"}, #07130c)` }}
-              >
-                {u.short_name ?? u.name.slice(0, 3)}
-              </span>
+              <UniLogo uni={u} size={64} />
               <span className="line-clamp-2 text-xs text-muted">{u.name}</span>
             </Link>
           ))}

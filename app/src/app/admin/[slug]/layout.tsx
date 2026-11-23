@@ -1,5 +1,6 @@
 import { requireUniRole } from "@/lib/auth";
 import { AdminTabs } from "@/components/admin/tabs";
+import { UniLogo } from "@/components/uni-logo";
 
 export default async function UniAdminLayout({ children, params }: { children: React.ReactNode; params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -17,12 +18,7 @@ export default async function UniAdminLayout({ children, params }: { children: R
   return (
     <div>
       <div className="mb-5 flex items-center gap-3">
-        <span
-          className="flex h-11 w-11 items-center justify-center rounded-xl text-xs font-extrabold text-white"
-          style={{ background: `linear-gradient(145deg, ${university.brand_color ?? "#16542F"}, #07130c)` }}
-        >
-          {university.short_name ?? university.name.slice(0, 3)}
-        </span>
+        <UniLogo uni={university} size={44} />
         <div>
           <h1 className="text-xl font-bold leading-tight">{university.name}</h1>
           <p className="text-xs capitalize text-muted">{role} console</p>

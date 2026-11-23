@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, CalendarPlus, Clock, Lock, MapPin, Ticket } from "lucide-react";
+import { ArrowLeft, CalendarPlus, Clock, ExternalLink, Lock, MapPin, Ticket } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentUser } from "@/lib/auth";
 import { listSponsors } from "@/lib/queries";
-import { fmtLongDay, fmtTime, isLive, nowMs, relativeStart } from "@/lib/format";
+import { fmtLongDay, fmtTime, isLiveEvent, nowMs, whenLabel } from "@/lib/format";
 import { LiveBadge } from "@/components/event-card";
 import { SponsorStrip } from "@/components/sponsor-strip";
 import { TicketPicker } from "@/components/ticket-picker";
@@ -38,7 +38,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
     : { count: 0 };
 
   const types = [...e.ticket_types].sort((a, b) => a.sort_order - b.sort_order || a.price_cents - b.price_cents);
-  const live = isLive(e.starts_at, e.ends_at);
+  const live = isLiveEvent(e);
   const ended = !live && new Date(e.starts_at).getTime() < nowMs();
   const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([e.venue, e.campus, e.universities.name].filter(Boolean).join(", "))}`;
 
@@ -76,9 +76,15 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
               <Lock size={12} /> Students only
             </span>
           )}
+          {e.is_demo && <span className="rounded-full bg-warn/15 px-2.5 py-1 text-xs font-semibold text-warn">Sample event</span>}
         </div>
         <h1 className="mt-3 text-3xl font-bold leading-tight tracking-tight">{e.title}</h1>
         {e.summary && <p className="mt-2 text-muted">{e.summary}</p>}
+        {e.source_url && (
+          <a href={e.source_url} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-leaf hover:underline">
+            <ExternalLink size={14} /> Official listing{e.time_tbc ? " — check start time" : ""}
+          </a>
+        )}
 
         {e.status === "cancelled" && (
           <div className="mt-4 rounded-xl border border-danger/40 bg-danger/10 p-3 font-semibold text-danger">This event has been cancelled.</div>
@@ -90,7 +96,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
             <div className="flex-1">
               <div className="font-semibold">{fmtLongDay(e.starts_at)}</div>
               <div className="text-sm text-muted">
-                {fmtTime(e.starts_at)}{e.ends_at ? ` – ${fmtTime(e.ends_at)}` : ""} · {relativeStart(e.starts_at, e.ends_at)}
+                {e.time_tbc ? whenLabel(e) : `${fmtTime(e.starts_at)}${e.ends_at ? ` – ${fmtTime(e.ends_at)}` : ""} · ${whenLabel(e).split(" · ")[0]}`}
               </div>
             </div>
             <a href={`/e/${e.id}/ics`} className="flex items-center gap-1 rounded-lg px-2 py-1 text-sm font-semibold text-leaf hover:bg-leaf/10">

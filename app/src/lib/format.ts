@@ -51,6 +51,22 @@ export function relativeStart(starts: string, ends: string | null, now = Date.no
   return fmtDay(starts);
 }
 
+type When = { starts_at: string; ends_at: string | null; time_tbc?: boolean | null };
+
+/** Live only when the start time is actually known. */
+export function isLiveEvent(e: When, now = Date.now()) {
+  return !e.time_tbc && isLive(e.starts_at, e.ends_at, now);
+}
+
+/** "In 3 hours · 7:00 PM", or day-level "Tomorrow · Time TBC" when the source gave no time. */
+export function whenLabel(e: When, now = Date.now()) {
+  if (!e.time_tbc) return `${relativeStart(e.starts_at, e.ends_at, now)} · ${fmtTime(e.starts_at)}`;
+  const day = (t: number) => Math.floor((t + 2 * 3600_000) / 86400_000); // Beirut day
+  const d = day(new Date(e.starts_at).getTime()) - day(now);
+  const rel = d < 0 ? (endOf(e.starts_at, e.ends_at) >= now ? "Ongoing" : "Ended") : d === 0 ? "Today" : d === 1 ? "Tomorrow" : d < 7 ? `In ${d} days` : fmtDay(e.starts_at);
+  return `${rel} · Time TBC`;
+}
+
 export function slugify(s: string) {
   return s
     .toLowerCase()

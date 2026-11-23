@@ -48,6 +48,12 @@ export interface EventRow {
   visibility: Visibility;
   status: EventStatus;
   gate_opens_minutes_before: number;
+  /** Official listing this event came from (real events). */
+  source_url?: string | null;
+  /** The official listing gave a date but no start time. */
+  time_tbc?: boolean;
+  /** Sample event created for the prototype. */
+  is_demo?: boolean;
 }
 
 export type EventWithUni = EventRow & {

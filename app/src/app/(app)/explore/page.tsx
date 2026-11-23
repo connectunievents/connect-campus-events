@@ -6,6 +6,7 @@ import { EventRow } from "@/components/event-card";
 import { EmptyState, PageTitle } from "@/components/ui";
 import { SearchBox } from "@/components/search-box";
 import { FollowButton } from "@/components/follow-button";
+import { UniLogo } from "@/components/uni-logo";
 import { CATEGORIES } from "@/lib/types";
 
 export const metadata = { title: "Explore" };
@@ -67,12 +68,7 @@ export default async function ExplorePage({ searchParams }: { searchParams: Prom
             {unis.map((u) => (
               <li key={u.id} className="flex items-center gap-3 py-3">
                 <Link href={`/u/${u.slug}`} className="flex min-w-0 flex-1 items-center gap-3">
-                  <span
-                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-xs font-extrabold text-white"
-                    style={{ background: `linear-gradient(145deg, ${u.brand_color ?? "#16542F"}, #07130c)` }}
-                  >
-                    {u.short_name ?? u.name.slice(0, 3)}
-                  </span>
+                  <UniLogo uni={u} size={48} />
                   <span className="min-w-0">
                     <span className="block truncate font-semibold">{u.name}</span>
                     <span className="block truncate text-xs text-muted">{[u.city, u.country].filter(Boolean).join(", ")}</span>

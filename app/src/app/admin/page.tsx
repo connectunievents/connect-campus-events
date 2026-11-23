@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { Crown, ShieldAlert } from "lucide-react";
 import { getMemberships, requireUser } from "@/lib/auth";
 import { EmptyState } from "@/components/ui";
+import { UniLogo } from "@/components/uni-logo";
 
 export const metadata = { title: "Admin" };
 
@@ -38,12 +39,7 @@ export default async function AdminHome({ searchParams }: { searchParams: Promis
               href={`/admin/${m.universities.slug}`}
               className="group flex items-center gap-3 rounded-2xl border border-line bg-surface p-4 transition hover:border-leaf"
             >
-              <span
-                className="flex h-12 w-12 items-center justify-center rounded-xl text-xs font-extrabold text-white"
-                style={{ background: `linear-gradient(145deg, ${m.universities.brand_color ?? "#16542F"}, #07130c)` }}
-              >
-                {m.universities.short_name ?? m.universities.name.slice(0, 3)}
-              </span>
+              <UniLogo uni={m.universities} size={48} />
               <span>
                 <span className="block font-semibold group-hover:text-leaf">{m.universities.name}</span>
                 <span className="block text-xs capitalize text-muted">{m.role}</span>

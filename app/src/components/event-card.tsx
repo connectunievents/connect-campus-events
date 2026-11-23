@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { MapPin, Lock } from "lucide-react";
 import type { EventWithUni } from "@/lib/types";
-import { fmtDate, fmtMonth, fmtTime, isLive, priceFrom, relativeStart, remaining } from "@/lib/format";
+import { fmtDate, fmtMonth, isLiveEvent, priceFrom, remaining, whenLabel } from "@/lib/format";
 
 const FALLBACK = "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200&q=60";
 
@@ -28,7 +28,7 @@ function Scarcity({ e }: { e: EventWithUni }) {
 
 /** Large poster card for horizontal rails. */
 export function EventPoster({ e, priority = false }: { e: EventWithUni; priority?: boolean }) {
-  const live = isLive(e.starts_at, e.ends_at);
+  const live = isLiveEvent(e);
   return (
     <Link
       href={`/e/${e.id}`}
@@ -59,7 +59,7 @@ export function EventPoster({ e, priority = false }: { e: EventWithUni; priority
       </div>
       <div className="absolute inset-x-0 bottom-0 p-4">
         <div className="mb-1 flex items-center gap-2 text-xs font-semibold text-leaf">
-          {relativeStart(e.starts_at, e.ends_at)} · {fmtTime(e.starts_at)}
+          {whenLabel(e)}
           {e.visibility === "students" && <Lock size={12} className="text-muted" />}
         </div>
         <h3 className="text-xl font-bold leading-tight">{e.title}</h3>
@@ -79,7 +79,7 @@ export function EventPoster({ e, priority = false }: { e: EventWithUni; priority
 
 /** Compact list row. */
 export function EventRow({ e }: { e: EventWithUni }) {
-  const live = isLive(e.starts_at, e.ends_at);
+  const live = isLiveEvent(e);
   return (
     <Link href={`/e/${e.id}`} className="flex items-center gap-3 rounded-2xl p-2 transition-colors hover:bg-surface active:bg-surface-2">
       <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-surface">
@@ -88,7 +88,7 @@ export function EventRow({ e }: { e: EventWithUni }) {
       </div>
       <div className="min-w-0 flex-1">
         <div className="text-xs font-semibold text-leaf">
-          {relativeStart(e.starts_at, e.ends_at)} · {fmtTime(e.starts_at)}
+          {whenLabel(e)}
         </div>
         <div className="truncate font-semibold">{e.title}</div>
         <div className="mt-0.5 flex items-center gap-2 text-xs text-muted">
