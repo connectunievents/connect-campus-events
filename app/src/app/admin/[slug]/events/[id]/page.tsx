@@ -72,7 +72,7 @@ export default async function AdminEvent({ params, searchParams }: { params: Pro
           ["Sold", `${stats?.sold ?? 0} / ${stats?.capacity ?? 0}`],
           ["Checked in", stats?.checked_in ?? 0],
           ["Check-in rate", stats?.sold ? `${Math.round((stats.checked_in / stats.sold) * 100)}%` : "—"],
-          ["Revenue", money(Number(stats?.revenue_cents ?? 0))],
+          ["Revenue", Number(stats?.revenue_cents ?? 0) ? money(Number(stats?.revenue_cents)) : "$0"],
         ].map(([k, v]) => (
           <div key={k as string} className="rounded-2xl border border-line bg-surface p-4">
             <div className="text-sm text-muted">{k}</div>

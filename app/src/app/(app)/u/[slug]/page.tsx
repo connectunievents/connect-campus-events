@@ -51,6 +51,11 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
         <Link href="/explore" className="pt-safe absolute left-3 top-3 rounded-full bg-ink/60 p-2 backdrop-blur" aria-label="Back">
           <ArrowLeft size={20} />
         </Link>
+        {uni.cover_credit && (
+          <p className="absolute right-3 top-3 max-w-[60%] rounded-md bg-ink/60 px-2 py-0.5 text-right text-[10px] leading-tight text-white/70 backdrop-blur">
+            {uni.cover_credit}
+          </p>
+        )}
       </div>
 
       <section className="relative -mt-14 px-4">

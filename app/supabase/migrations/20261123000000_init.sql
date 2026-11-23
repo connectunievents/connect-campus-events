@@ -50,8 +50,9 @@ create trigger on_auth_user_created
 create or replace function public.protect_owner_flag()
 returns trigger language plpgsql as $$
 begin
+  -- App users run as 'authenticated'/'anon'; the SQL editor and service role are trusted.
   if new.is_owner is distinct from old.is_owner
-     and coalesce(auth.role(), '') <> 'service_role'
+     and current_user in ('authenticated', 'anon')
      and not exists (select 1 from public.profiles p where p.id = auth.uid() and p.is_owner) then
     raise exception 'Only platform owners can change owner status';
   end if;

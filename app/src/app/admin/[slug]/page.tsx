@@ -82,7 +82,7 @@ export default async function UniEvents({ params }: { params: Promise<{ slug: st
         <Stat icon={<CalendarDays size={16} />} label="Upcoming events" value={upcoming.length} />
         <Stat icon={<Ticket size={16} />} label="Tickets issued" value={totals.sold} />
         <Stat icon={<ScanLine size={16} />} label="Checked in" value={totals.checkedIn} />
-        <Stat icon={<DollarSign size={16} />} label="Revenue" value={money(totals.revenue)} />
+        <Stat icon={<DollarSign size={16} />} label="Revenue" value={totals.revenue ? money(totals.revenue) : "$0"} />
       </div>
 
       <section>

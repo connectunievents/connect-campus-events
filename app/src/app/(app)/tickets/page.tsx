@@ -21,6 +21,7 @@ type Row = {
     title: string;
     starts_at: string;
     ends_at: string | null;
+    time_tbc?: boolean;
     venue: string | null;
     cover_url: string | null;
     universities: { short_name: string | null; name: string; brand_color: string | null } | null;
@@ -33,7 +34,7 @@ export default async function TicketsPage({ searchParams }: { searchParams: Prom
   const supabase = await createClient();
   const { data } = await supabase
     .from("tickets")
-    .select("id, code, status, holder_name, event_id, ticket_types(name), events(id, title, starts_at, ends_at, venue, cover_url, universities(short_name, name, brand_color))")
+    .select("id, code, status, holder_name, event_id, ticket_types(name), events(id, title, starts_at, ends_at, time_tbc, venue, cover_url, universities(short_name, name, brand_color))")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
@@ -124,7 +125,7 @@ function TicketStack({ group }: { group: Row[] }) {
           <div>
             <div className="text-sm font-semibold text-leaf">{relativeStart(e.starts_at, e.ends_at)}</div>
             <div className="text-sm text-muted">
-              {fmtDay(e.starts_at)} · {fmtTime(e.starts_at)} · {e.venue ?? "Campus"}
+              {fmtDay(e.starts_at)} · {e.time_tbc ? "Time TBC" : fmtTime(e.starts_at)} · {e.venue ?? "Campus"}
             </div>
           </div>
           <div className="text-right">

@@ -18,6 +18,7 @@ export type LiveTicketData = {
     title: string;
     starts_at: string;
     ends_at: string | null;
+    time_tbc?: boolean;
     venue: string | null;
     campus: string | null;
     universities: { name: string; short_name: string | null; brand_color: string | null } | null;
@@ -160,7 +161,7 @@ export function LiveTicket({ tickets, startIndex }: { tickets: LiveTicketData[];
               </div>
               <div>
                 <div className="text-white/70">Time</div>
-                <div className="font-semibold">{fmtTime(e.starts_at)}</div>
+                <div className="font-semibold">{e.time_tbc ? "TBC" : fmtTime(e.starts_at)}</div>
               </div>
               <div>
                 <div className="text-white/70">Venue</div>

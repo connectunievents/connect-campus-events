@@ -17,7 +17,7 @@ export default async function TicketPage({ params }: { params: Promise<{ id: str
   // All of this user's tickets for the same event (swipe between them).
   const { data } = await supabase
     .from("tickets")
-    .select("id, code, status, holder_name, checked_in_at, ticket_types(name), events(title, starts_at, ends_at, venue, campus, universities(name, short_name, brand_color))")
+    .select("id, code, status, holder_name, checked_in_at, ticket_types(name), events(title, starts_at, ends_at, time_tbc, venue, campus, universities(name, short_name, brand_color))")
     .eq("user_id", user.id)
     .eq("event_id", first.event_id)
     .order("created_at");

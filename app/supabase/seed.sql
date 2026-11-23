@@ -4,7 +4,7 @@
 insert into public.universities (slug, name, short_name, city, country, email_domains, brand_color, website_url, logo_url, cover_url) values
  ('lau',  'Lebanese American University',      'LAU',  'Beirut / Byblos', 'Lebanon', '{lau.edu.lb,lau.edu}', '#006A4E', 'https://www.lau.edu.lb', null, 'https://images.unsplash.com/photo-1562774053-701939374585?w=1600&q=70'),
  ('aub',  'American University of Beirut',     'AUB',  'Beirut',          'Lebanon', '{aub.edu.lb,mail.aub.edu}', '#840132', 'https://www.aub.edu.lb', null, 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1600&q=70'),
- ('usj',  'Université Saint-Joseph',           'USJ',  'Beirut',          'Lebanon', '{usj.edu.lb,net.usj.edu.lb}', '#00377B', 'https://www.usj.edu.lb', null, 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1600&q=70'),
+ ('usj',  'Université Saint-Joseph',           'USJ',  'Beirut',          'Lebanon', '{usj.edu.lb,net.usj.edu.lb}', '#00377B', 'https://www.usj.edu.lb', null, 'https://images.unsplash.com/photo-1562774053-701939374585?w=1600&q=70'),
  ('ndu',  'Notre Dame University – Louaize',   'NDU',  'Zouk Mosbeh',     'Lebanon', '{ndu.edu.lb}', '#00205B', 'https://www.ndu.edu.lb', null, 'https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?w=1600&q=70'),
  ('liu',  'Lebanese International University','LIU',  'Beirut',          'Lebanon', '{liu.edu.lb,students.liu.edu.lb}', '#0D4C92', 'https://liu.edu.lb', null, 'https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=1600&q=70'),
  ('bau',  'Beirut Arab University',            'BAU',  'Beirut',          'Lebanon', '{bau.edu.lb,student.bau.edu.lb}', '#1F3A93', 'https://www.bau.edu.lb', null, 'https://images.unsplash.com/photo-1592280771190-3e2e4d571952?w=1600&q=70'),

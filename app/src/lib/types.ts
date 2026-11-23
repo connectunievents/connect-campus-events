@@ -12,6 +12,8 @@ export interface University {
   email_domains: string[];
   logo_url: string | null;
   cover_url: string | null;
+  /** Attribution required by the cover photo's license. */
+  cover_credit?: string | null;
   brand_color: string | null;
   website_url: string | null;
   is_active: boolean;

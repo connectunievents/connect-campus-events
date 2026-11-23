@@ -5,7 +5,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getStripe, paymentProvider } from "@/lib/payments";
 import { SITE_URL } from "@/lib/env";
 
-const Body = z.object({ ticketTypeId: z.string().uuid(), quantity: z.number().int().min(1).max(20) });
+const Body = z.object({ ticketTypeId: z.string().guid(), quantity: z.number().int().min(1).max(20) });
 
 export async function POST(req: Request) {
   const parsed = Body.safeParse(await req.json().catch(() => null));

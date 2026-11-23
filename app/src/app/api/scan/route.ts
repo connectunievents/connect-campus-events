@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { parsePayload, verifyOtp } from "@/lib/rolling-code";
 
-const Body = z.object({ eventId: z.string().uuid(), raw: z.string().min(1).max(300) });
+const Body = z.object({ eventId: z.string().guid(), raw: z.string().min(1).max(300) });
 
 export type ScanResponse = {
   result: "admitted" | "already_used" | "invalid" | "wrong_event" | "void" | "expired_code" | "not_today" | "forbidden";
@@ -48,7 +48,7 @@ async function eventStats(admin: ReturnType<typeof createAdminClient>, eventId: 
 
 export async function GET(req: Request) {
   const eventId = new URL(req.url).searchParams.get("eventId") ?? "";
-  if (!z.string().uuid().safeParse(eventId).success) return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  if (!z.string().guid().safeParse(eventId).success) return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   const auth = await authorize(eventId);
   if ("error" in auth) return auth.error;
   return NextResponse.json({ stats: await eventStats(auth.admin, eventId) });

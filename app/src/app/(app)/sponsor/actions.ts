@@ -18,7 +18,7 @@ const Schema = z.object({
   phone: z.string().trim().max(40).optional().or(z.literal("")),
   website_url: z.string().trim().url("Include https://").optional().or(z.literal("")),
   budget_range: z.string().max(40).optional().or(z.literal("")),
-  university_id: z.string().uuid().optional().or(z.literal("")),
+  university_id: z.string().guid().optional().or(z.literal("")),
   preferred_contact: z.enum(["email", "phone"]).default("email"),
   message: z.string().trim().min(10, "Tell us a bit more (10+ characters)").max(4000),
 });
