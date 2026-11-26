@@ -23,9 +23,14 @@ export async function POST(req: Request) {
       const { error } = await admin.rpc("fulfill_order", { p_order: s.metadata.order_id, p_provider: "stripe", p_ref: s.id });
       if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     }
+    if (s.payment_status === "paid" && s.metadata?.listing_id) {
+      const { error } = await admin.rpc("fulfill_listing", { p_listing: s.metadata.listing_id, p_provider: "stripe", p_ref: s.id });
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    }
   } else if (event.type === "checkout.session.expired" || event.type === "checkout.session.async_payment_failed") {
     const s = event.data.object as Stripe.Checkout.Session;
     if (s.metadata?.order_id) await admin.rpc("fail_order", { p_order: s.metadata.order_id });
+    if (s.metadata?.listing_id) await admin.rpc("fail_listing", { p_listing: s.metadata.listing_id });
   }
   return NextResponse.json({ received: true });
 }

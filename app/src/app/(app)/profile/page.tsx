@@ -82,7 +82,7 @@ export default async function ProfilePage() {
           href="/sponsor-hub"
           icon={<Handshake size={20} />}
           title={mySponsor ? "My sponsor profile" : "Become a sponsor"}
-          sub={mySponsor ? mySponsor.name : "Create a free public profile for your company"}
+          sub={mySponsor ? mySponsor.name : "Get your business verified and listed"}
         />
       </section>
 

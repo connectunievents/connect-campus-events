@@ -75,7 +75,7 @@ export async function saveSponsorProfile(_prev: SponsorFormState, f: FormData): 
   const { error } = await supabase.from("sponsor_profiles").insert({ ...row, slug, owner_id: user.id });
   if (error) return { error: error.code === "23505" ? "You already have a sponsor profile" : error.message };
   revalidatePath("/sponsors");
-  redirect(`/sponsors/${slug}?created=1`);
+  redirect("/sponsor-hub?created=1");
 }
 
 export async function deleteSponsorProfile() {

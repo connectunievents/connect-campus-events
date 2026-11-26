@@ -1,14 +1,15 @@
 /* eslint-disable @next/next/no-img-element -- cover images come from Supabase Storage or any URL */
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Globe, Mail, MapPin, MessageSquare, Pencil, Phone, Wallet, Gift, EyeOff } from "lucide-react";
+import { ArrowLeft, BadgeCheck, Globe, Mail, MapPin, MessageSquare, Pencil, Phone, Wallet, Gift, EyeOff } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentUser } from "@/lib/auth";
 import { getSponsorContact, getStaffUniversities } from "@/lib/sponsors";
 import { SponsorAvatar, interestLabel } from "@/components/sponsor-card";
 import { StartThreadForm } from "@/components/start-thread-form";
 import { buttonClass } from "@/components/ui";
-import { SPONSOR_PROFILE_SELECT, industryLabel, type SponsorProfile } from "@/lib/types";
+import { SPONSOR_PROFILE_SELECT, industryLabel, isSponsorLive, type SponsorProfile } from "@/lib/types";
+import { nowMs } from "@/lib/format";
 
 async function load(slug: string) {
   const supabase = await createClient();
@@ -28,6 +29,8 @@ export default async function SponsorProfilePage({ params, searchParams }: { par
   if (!p) notFound();
 
   const user = await getCurrentUser();
+  const viewer = user;
+  const live = isSponsorLive(p, nowMs());
   const isMine = user?.id === p.owner_id;
   const [contact, staffUnis] = await Promise.all([getSponsorContact(p.id), user && !isMine ? getStaffUniversities() : Promise.resolve([])]);
 
@@ -48,12 +51,20 @@ export default async function SponsorProfilePage({ params, searchParams }: { par
       <section className="relative -mt-10 px-4">
         {created && (
           <p className="mb-4 rounded-xl border border-leaf/40 bg-leaf/10 p-3 text-sm">
-            🎉 Your sponsor profile is live. Universities can now find you and send you messages — check your <Link href="/inbox" className="font-semibold text-leaf">inbox</Link>.
+            Profile saved. Next, <Link href="/sponsor-hub" className="font-semibold text-leaf">verify your business</Link> to get listed.
           </p>
         )}
-        {(p.is_hidden || !p.is_published) && (
+        {(isMine || viewer?.isOwner) && !live && (
           <p className="mb-4 flex items-center gap-2 rounded-xl border border-warn/40 bg-warn/10 p-3 text-sm text-warn">
-            <EyeOff size={16} /> {p.is_hidden ? "Hidden by the Connect team — only you can see it." : "Unpublished — only you can see it."}
+            <EyeOff size={16} />
+            {p.is_hidden
+              ? "Hidden by the Connect team — only you can see it."
+              : p.verification_status !== "approved"
+                ? "Not public yet: the business must be verified first."
+                : "Not public: no active listing package."}
+            {isMine && (
+              <Link href="/sponsor-hub" className="ml-auto shrink-0 font-semibold underline">Fix</Link>
+            )}
           </p>
         )}
         <div className="flex items-end justify-between gap-3">
@@ -66,7 +77,13 @@ export default async function SponsorProfilePage({ params, searchParams }: { par
             </Link>
           )}
         </div>
-        <h1 className="mt-3 text-2xl font-bold leading-tight">{p.name}</h1>
+        <h1 className="mt-3 flex items-center gap-2 text-2xl font-bold leading-tight">
+          {p.name}
+          {p.verification_status === "approved" && (
+            <BadgeCheck size={22} className="shrink-0 text-leaf" aria-label="Verified business" />
+          )}
+        </h1>
+        {p.verification_status === "approved" && <p className="text-xs font-semibold text-leaf">Verified business</p>}
         <p className="text-sm font-semibold text-leaf">{industryLabel(p.industry)}</p>
         {p.tagline && <p className="mt-2 text-muted">{p.tagline}</p>}
 
@@ -128,6 +145,8 @@ export default async function SponsorProfilePage({ params, searchParams }: { par
             This is your profile. Messages from universities arrive in your <Link href="/inbox" className="font-semibold text-leaf">inbox</Link>. You can also propose a
             sponsorship from any university&apos;s page.
           </p>
+        ) : !live ? (
+          <p className="mt-2 text-sm text-muted">This sponsor isn&apos;t currently listed, so new conversations are paused.</p>
         ) : !user ? (
           <p className="mt-2 text-sm text-muted">
             <Link href={`/login?next=/sponsors/${p.slug}`} className="font-semibold text-leaf">Sign in</Link> with your university staff account to send {p.name} a message.

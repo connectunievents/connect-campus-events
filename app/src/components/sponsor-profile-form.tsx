@@ -117,14 +117,14 @@ export function SponsorProfileForm({
         <label className="flex items-start gap-3 text-sm">
           <input type="checkbox" name="is_published" defaultChecked={p?.is_published ?? true} className="mt-0.5 h-4 w-4 accent-[#52d483]" />
           <span>
-            <b>List my profile in the public sponsors directory.</b>
-            <span className="block text-muted">Untick to hide it while you work on it.</span>
+            <b>Show my profile in the sponsors directory while my listing is active.</b>
+            <span className="block text-muted">Your profile only appears after your business is verified and you have an active listing package.</span>
           </span>
         </label>
       </section>
 
       <button disabled={pending} className="flex w-full items-center justify-center gap-2 rounded-2xl bg-leaf py-3.5 text-lg font-bold text-ink active:scale-[0.98] disabled:opacity-60">
-        {pending ? <Loader2 className="animate-spin" /> : <Save size={20} />} {p ? "Save changes" : "Create my sponsor profile"}
+        {pending ? <Loader2 className="animate-spin" /> : <Save size={20} />} {p ? "Save profile" : "Continue to verification"}
       </button>
 
       {p && (

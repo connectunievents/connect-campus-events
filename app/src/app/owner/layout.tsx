@@ -27,7 +27,8 @@ export default async function OwnerLayout({ children }: { children: React.ReactN
             { href: "/owner", label: "Universities" },
             { href: "/owner/inquiries", label: "Sponsor inquiries" },
             { href: "/owner/sponsors", label: "Platform sponsors" },
-            { href: "/owner/sponsor-profiles", label: "Sponsor profiles" },
+            { href: "/owner/sponsor-profiles", label: "Sponsor verification" },
+            { href: "/owner/sponsor-pricing", label: "Sponsor pricing" },
           ]}
         />
         <div className="mt-6">{children}</div>

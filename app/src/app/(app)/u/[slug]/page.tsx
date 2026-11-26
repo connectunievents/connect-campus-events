@@ -13,7 +13,7 @@ import { getMySponsorProfile } from "@/lib/sponsors";
 import { UniLogo } from "@/components/uni-logo";
 import { EmptyState, Rail, SectionHeader, buttonClass } from "@/components/ui";
 import { SponsorStrip } from "@/components/sponsor-strip";
-import type { University } from "@/lib/types";
+import { isSponsorLive, type University } from "@/lib/types";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -115,7 +115,7 @@ export default async function UniversityPage({ params, searchParams }: { params:
         <SponsorStrip sponsors={sponsors} title={`${uni.short_name ?? "Campus"} partners`} />
       </div>
 
-      {mySponsor && !mySponsor.is_hidden && (
+      {mySponsor && isSponsorLive(mySponsor) && (
         <section id="propose" className="squircle-lg mx-4 mb-8 border border-leaf/30 bg-gradient-to-br from-leaf/10 to-transparent p-5">
           <h2 className="text-lg font-bold">Propose a sponsorship to {uni.short_name ?? uni.name}</h2>
           <p className="mt-1 text-sm text-muted">

@@ -120,11 +120,49 @@ export interface SponsorProfile {
   is_published: boolean;
   is_hidden: boolean;
   created_at: string;
+  verification_status: "draft" | "pending" | "approved" | "rejected";
+  listed_from: string | null;
+  listed_until: string | null;
 }
+
+/** Business-verification fields (visible to the sponsor itself and platform owners). */
+export type SponsorPrivate = SponsorProfile & {
+  legal_name: string | null;
+  registration_number: string | null;
+  registration_country: string | null;
+  submitted_at: string | null;
+  verified_at: string | null;
+  review_notes: string | null;
+};
 
 /** Public columns (contact details come from the sponsor_contact() function). */
 export const SPONSOR_PROFILE_SELECT =
-  "id, owner_id, slug, name, tagline, about, industry, logo_url, cover_url, website_url, city, country, interests, offer, budget_range, show_contact, is_published, is_hidden, created_at";
+  "id, owner_id, slug, name, tagline, about, industry, logo_url, cover_url, website_url, city, country, interests, offer, budget_range, show_contact, is_published, is_hidden, created_at, verification_status, listed_from, listed_until";
+export const SPONSOR_PRIVATE_SELECT = `${SPONSOR_PROFILE_SELECT}, legal_name, registration_number, registration_country, submitted_at, verified_at, review_notes`;
+
+export const isSponsorLive = (p: Pick<SponsorProfile, "verification_status" | "is_hidden" | "listed_from" | "listed_until">, now = Date.now()) =>
+  p.verification_status === "approved" &&
+  !p.is_hidden &&
+  !!p.listed_from &&
+  !!p.listed_until &&
+  new Date(p.listed_from).getTime() <= now &&
+  new Date(p.listed_until).getTime() > now;
+
+export interface ListingPlan {
+  id: "week" | "month" | "quarter" | "custom";
+  name: string;
+  days: number | null;
+  price_cents: number;
+  currency: string;
+  sort_order: number;
+  is_active: boolean;
+}
+
+export const DOCUMENT_KINDS = [
+  { id: "registration", label: "Commercial registration / trade licence", required: true },
+  { id: "tax", label: "Tax / VAT certificate", required: false },
+  { id: "other", label: "Other supporting document", required: false },
+] as const;
 
 export const INDUSTRIES = [
   { id: "food", label: "Food & drinks" },

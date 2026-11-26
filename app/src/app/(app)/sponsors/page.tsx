@@ -73,8 +73,8 @@ export default async function SponsorsDirectory({ searchParams }: { searchParams
       </section>
       {profiles.length === 0 && (
         <div className="mt-4">
-          <EmptyState icon={q || industry ? <SearchX /> : <Handshake />} title={q || industry ? "No sponsors match" : "No sponsors yet"} body="Companies can create a free profile in a minute.">
-            <Link href="/sponsor-hub" className={buttonClass("primary", "sm")}>Create a sponsor profile</Link>
+          <EmptyState icon={q || industry ? <SearchX /> : <Handshake />} title={q || industry ? "No sponsors match" : "No sponsors yet"} body="Verified businesses appear here while their listing package is active.">
+            <Link href="/sponsor-hub" className={buttonClass("primary", "sm")}>Become a sponsor</Link>
           </EmptyState>
         </div>
       )}
@@ -83,8 +83,8 @@ export default async function SponsorsDirectory({ searchParams }: { searchParams
         <div className="mx-4 mt-8 rounded-[var(--radius-card)] border border-leaf/30 bg-gradient-to-br from-leaf/15 to-transparent p-5">
           <Handshake className="text-leaf" />
           <p className="mt-2 text-lg font-bold">Is your company a sponsor?</p>
-          <p className="mt-1 text-sm text-muted">Create a free profile so universities and student clubs can find you and invite you to their events.</p>
-          <Link href="/sponsor-hub" className={`${buttonClass("primary")} mt-4 w-full`}>Create your profile</Link>
+          <p className="mt-1 text-sm text-muted">Verify your business and choose a listing package so universities and student clubs can find you and invite you to their events.</p>
+          <Link href="/sponsor-hub" className={`${buttonClass("primary")} mt-4 w-full`}>Become a sponsor</Link>
         </div>
       )}
     </main>

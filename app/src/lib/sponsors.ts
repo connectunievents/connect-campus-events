@@ -2,14 +2,14 @@ import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentUser, getMemberships } from "@/lib/auth";
 import { isoFromNow } from "@/lib/format";
-import { SPONSOR_PROFILE_SELECT, type SponsorProfile } from "@/lib/types";
+import { SPONSOR_PRIVATE_SELECT, type SponsorPrivate } from "@/lib/types";
 
-export async function getMySponsorProfile(): Promise<SponsorProfile | null> {
+export async function getMySponsorProfile(): Promise<SponsorPrivate | null> {
   const user = await getCurrentUser();
   if (!user) return null;
   const supabase = await createClient();
-  const { data } = await supabase.from("sponsor_profiles").select(SPONSOR_PROFILE_SELECT).eq("owner_id", user.id).maybeSingle();
-  return (data as SponsorProfile | null) ?? null;
+  const { data } = await supabase.from("sponsor_profiles").select(SPONSOR_PRIVATE_SELECT).eq("owner_id", user.id).maybeSingle();
+  return (data as SponsorPrivate | null) ?? null;
 }
 
 export async function getSponsorContact(profileId: string) {

@@ -11,7 +11,7 @@ import { LiveBadge } from "@/components/event-card";
 import { SponsorStrip } from "@/components/sponsor-strip";
 import { TicketPicker } from "@/components/ticket-picker";
 import { ShareButton } from "@/components/share-button";
-import type { EventRow, TicketType, University } from "@/lib/types";
+import { isSponsorLive, type EventRow, type TicketType, type University } from "@/lib/types";
 
 type Full = EventRow & { universities: University; ticket_types: TicketType[] };
 
@@ -127,7 +127,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
           </Link>
         )}
 
-        {mySponsor && !mySponsor.is_hidden && !ended && (
+        {mySponsor && isSponsorLive(mySponsor) && !ended && (
           <Link
             href={`/u/${e.universities.slug}?sponsor_event=${e.id}#propose`}
             className="squircle mt-4 flex items-center justify-between border border-leaf/40 bg-leaf/10 p-4"

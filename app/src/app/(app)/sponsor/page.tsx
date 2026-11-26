@@ -27,9 +27,9 @@ export default async function SponsorPage() {
       <div className="grid gap-3 sm:grid-cols-2">
         <Link href="/sponsor-hub" className="squircle-lg group border border-leaf/40 bg-gradient-to-br from-leaf/15 to-transparent p-5 transition hover:border-leaf">
           <Store className="text-leaf" />
-          <p className="mt-2 text-lg font-bold">Create a free sponsor profile</p>
+          <p className="mt-2 text-lg font-bold">Get verified &amp; listed as a sponsor</p>
           <p className="mt-1 text-sm text-muted">
-            Get listed in the <b className="text-text">sponsors directory</b>. Universities and clubs find you and message you about their events.
+            Verify your business with official documents, choose a listing package (1 week, 1 month, 3 months or custom dates) and appear in the <b className="text-text">sponsors directory</b>, where universities and clubs message you about their events.
           </p>
           <span className="mt-3 inline-block text-sm font-semibold text-leaf group-hover:underline">Get started →</span>
         </Link>
