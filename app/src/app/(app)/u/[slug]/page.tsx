@@ -101,7 +101,7 @@ export default async function UniversityPage({ params, searchParams }: { params:
       <section className="mt-7">
         <SectionHeader title="Upcoming events" />
         {rest.length ? (
-          <div className="space-y-1 px-2">
+          <div className="grid gap-1 px-2 sm:grid-cols-2 lg:grid-cols-3">
             {rest.map((e) => (
               <EventRow key={e.id} e={e} />
             ))}

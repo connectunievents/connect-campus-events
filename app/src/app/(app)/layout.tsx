@@ -4,7 +4,7 @@ import { SetupBanner } from "@/components/setup-banner";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mx-auto min-h-dvh max-w-md pb-nav md:max-w-2xl">
+    <div className="mx-auto min-h-dvh w-full max-w-6xl pb-nav">
       <SetupBanner />
       {children}
       <InstallPrompt />

@@ -65,7 +65,7 @@ export default async function TicketsPage({ searchParams }: { searchParams: Prom
         </EmptyState>
       ) : null}
 
-      <div className="space-y-4 px-4">
+      <div className="grid gap-5 px-4 sm:grid-cols-2 lg:grid-cols-3">
         {upcoming.map((g) => (
           <TicketStack key={g[0].event_id} group={g} />
         ))}

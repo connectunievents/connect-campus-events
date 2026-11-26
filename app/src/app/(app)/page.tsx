@@ -132,7 +132,7 @@ export default async function HomePage() {
       {upcoming.length > thisWeek.length && (
         <section className="mb-7">
           <SectionHeader title="Coming up" />
-          <div className="space-y-1 px-2">
+          <div className="grid gap-1 px-2 sm:grid-cols-2 lg:grid-cols-3">
             {upcoming
               .filter((e) => !thisWeek.includes(e))
               .slice(0, 10)

@@ -64,7 +64,7 @@ export default async function ExplorePage({ searchParams }: { searchParams: Prom
       {unis.length > 0 && category === "all" && !mineOnly && (
         <section className="mt-6">
           <h2 className="mb-2 px-4 text-sm font-semibold uppercase tracking-widest text-muted">Universities</h2>
-          <ul className="divide-y divide-line/60 px-4">
+          <ul className="grid divide-y divide-line/60 px-4 sm:grid-cols-2 sm:gap-x-6 sm:divide-y-0 lg:grid-cols-3">
             {unis.map((u) => (
               <li key={u.id} className="flex items-center gap-3 py-3">
                 <Link href={`/u/${u.slug}`} className="flex min-w-0 flex-1 items-center gap-3">
@@ -86,7 +86,7 @@ export default async function ExplorePage({ searchParams }: { searchParams: Prom
           {q ? `Events matching “${q}”` : "Upcoming events"}
         </h2>
         {events.length ? (
-          <div className="space-y-1 px-2">
+          <div className="grid gap-1 px-2 sm:grid-cols-2 lg:grid-cols-3">
             {events.map((e) => (
               <EventRow key={e.id} e={e} />
             ))}

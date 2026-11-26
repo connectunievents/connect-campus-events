@@ -66,7 +66,7 @@ export default async function SponsorsDirectory({ searchParams }: { searchParams
         ))}
       </div>
 
-      <section className="mt-5 grid gap-3 px-4 md:grid-cols-2">
+      <section className="mt-5 grid gap-3 px-4 sm:grid-cols-2 lg:grid-cols-3">
         {profiles.map((p) => (
           <SponsorCard key={p.id} p={p} />
         ))}

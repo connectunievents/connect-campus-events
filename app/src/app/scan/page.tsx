@@ -24,7 +24,7 @@ export default async function ScanPicker() {
     : { data: [] };
 
   return (
-    <main className="mx-auto min-h-dvh max-w-md px-4">
+    <main className="mx-auto min-h-dvh w-full max-w-3xl px-4">
       <header className="pt-safe flex items-center gap-3 pb-4 pt-3">
         <Link href="/profile" className="rounded-full bg-surface p-2" aria-label="Back">
           <ArrowLeft size={20} />

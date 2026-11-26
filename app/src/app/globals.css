@@ -75,8 +75,9 @@ body {
   padding-left: var(--safe-left);
   padding-right: var(--safe-right);
   -webkit-font-smoothing: antialiased;
-  touch-action: manipulation;     /* no double-tap zoom delay */
+  touch-action: pan-x pan-y;      /* scrolling only: no pinch or double-tap zoom */
 }
+html { touch-action: pan-x pan-y; }
 
 img, video, canvas, svg { max-width: 100%; }
 a, button, [role="button"], label { -webkit-user-select: none; user-select: none; }
@@ -134,8 +135,9 @@ p, h1, h2, h3, li { overflow-wrap: break-word; }
 }
 
 /* Safe areas: content never hides under the notch/Dynamic Island or home indicator. */
-.pt-safe { padding-top: calc(var(--safe-top) + 0.75rem); }
-.top-safe { top: calc(var(--safe-top) + 0.75rem); }
+/* Extra top room so headers sit clear of the status bar / Safari's blurred top edge. */
+.pt-safe { padding-top: calc(var(--safe-top) + 1.5rem); }
+.top-safe { top: calc(var(--safe-top) + 1.25rem); }
 .pb-nav { padding-bottom: calc(var(--safe-bottom) + var(--nav-h) + 1.25rem); }
 .bottom-nav { bottom: calc(var(--safe-bottom) + 0.5rem); }
 .bottom-above-nav { bottom: calc(var(--safe-bottom) + var(--nav-h) + 0.25rem); }
