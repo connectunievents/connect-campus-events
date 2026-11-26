@@ -43,6 +43,11 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         <p className="mt-8 text-center text-xs text-muted">
           Tip: sign in with your <b className="text-text">university email</b> to unlock students-only events.
         </p>
+        <p className="mt-3 text-center text-xs text-muted">
+          By continuing you agree to our{" "}
+          <Link href="/terms" className="underline hover:text-text">Terms</Link> and{" "}
+          <Link href="/privacy" className="underline hover:text-text">Privacy policy</Link>.
+        </p>
       </div>
     </main>
   );
