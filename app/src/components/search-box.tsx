@@ -27,7 +27,7 @@ export function SearchBox({ defaultValue = "" }: { defaultValue?: string }) {
   }, [value]);
 
   return (
-    <label className="flex items-center gap-3 rounded-2xl border border-line bg-surface px-4 py-3 focus-within:border-leaf focus-within:ring-4 focus-within:ring-leaf/15">
+    <label className="flex items-center gap-3 rounded-2xl border border-line card-glass px-4 py-3 focus-within:border-leaf focus-within:ring-4 focus-within:ring-leaf/15">
       {pending ? <Loader2 size={20} className="animate-spin text-leaf" /> : <Search size={20} className="text-leaf" />}
       <input
         autoFocus={!defaultValue}

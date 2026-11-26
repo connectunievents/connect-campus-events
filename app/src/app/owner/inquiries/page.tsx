@@ -40,7 +40,7 @@ export default async function Inquiries({ searchParams }: { searchParams: Promis
 
       <div className="grid gap-4 md:grid-cols-2">
         {(data ?? []).map((i) => (
-          <article key={i.id} className="rounded-2xl border border-line bg-surface p-5">
+          <article key={i.id} className="rounded-2xl border border-line card-glass p-5">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h3 className="text-lg font-bold">{i.company_name}</h3>

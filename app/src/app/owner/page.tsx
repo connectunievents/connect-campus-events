@@ -46,7 +46,7 @@ export default async function OwnerUniversities() {
         </table>
       </section>
 
-      <ActionForm action={createUniversity} resetOnSuccess className="h-fit space-y-3 rounded-2xl border border-line bg-surface p-5">
+      <ActionForm action={createUniversity} resetOnSuccess className="h-fit space-y-3 rounded-2xl border border-line card-glass p-5">
         <h2 className="font-bold">Onboard a university</h2>
         <div>
           <label className="label" htmlFor="u-name">Full name *</label>

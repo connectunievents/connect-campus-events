@@ -1,4 +1,5 @@
-import { Eye, MapPin, Sparkles, Users } from "lucide-react";
+import Link from "next/link";
+import { Eye, MapPin, Megaphone, Sparkles, Store, Users } from "lucide-react";
 import { searchUniversities } from "@/lib/queries";
 import { SponsorForm } from "@/components/sponsor-form";
 
@@ -20,12 +21,35 @@ export default async function SponsorPage() {
         <h1 className="mt-3 text-3xl font-bold leading-tight tracking-tight">
           Put your brand <span className="font-display italic text-leaf">on campus.</span>
         </h1>
-        <p className="mt-2 text-muted">Tell us about your company. Our team will reach out by email or phone within 2 business days.</p>
+        <p className="mt-2 text-muted">Two ways to work with students on Connect:</p>
       </header>
+
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Link href="/sponsor-hub" className="squircle-lg group border border-leaf/40 bg-gradient-to-br from-leaf/15 to-transparent p-5 transition hover:border-leaf">
+          <Store className="text-leaf" />
+          <p className="mt-2 text-lg font-bold">Create a free sponsor profile</p>
+          <p className="mt-1 text-sm text-muted">
+            Get listed in the <b className="text-text">sponsors directory</b>. Universities and clubs find you and message you about their events.
+          </p>
+          <span className="mt-3 inline-block text-sm font-semibold text-leaf group-hover:underline">Get started →</span>
+        </Link>
+        <a href="#advertise" className="squircle-lg group border border-line card-glass p-5 transition hover:border-leaf/60">
+          <Megaphone className="text-leaf" />
+          <p className="mt-2 text-lg font-bold">Advertise on Connect</p>
+          <p className="mt-1 text-sm text-muted">Logo placement across the app or on one campus. Tell us your goals and our team will contact you.</p>
+          <span className="mt-3 inline-block text-sm font-semibold text-leaf group-hover:underline">Contact our team ↓</span>
+        </a>
+      </div>
+      <p className="mt-3 text-center text-sm text-muted">
+        Looking for sponsors for your event? <Link href="/sponsors" className="font-semibold text-leaf">Browse the directory</Link>
+      </p>
+
+      <h2 id="advertise" className="mt-10 scroll-mt-6 text-xl font-bold">Advertise on Connect</h2>
+      <p className="mt-1 text-sm text-muted">Our partnerships team replies by email or phone within 2 business days.</p>
 
       <div className="grid gap-3 sm:grid-cols-3">
         {perks.map((p) => (
-          <div key={p.title} className="rounded-2xl border border-line bg-surface p-4">
+          <div key={p.title} className="rounded-2xl border border-line card-glass p-4">
             <span className="text-leaf">{p.icon}</span>
             <p className="mt-2 font-semibold">{p.title}</p>
             <p className="text-sm text-muted">{p.body}</p>

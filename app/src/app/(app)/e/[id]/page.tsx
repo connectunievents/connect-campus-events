@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, CalendarPlus, Clock, ExternalLink, Lock, MapPin, Ticket } from "lucide-react";
+import { ArrowLeft, CalendarPlus, Clock, ExternalLink, Handshake, Lock, MapPin, Ticket } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentUser } from "@/lib/auth";
 import { listSponsors } from "@/lib/queries";
+import { getMySponsorProfile } from "@/lib/sponsors";
 import { fmtLongDay, fmtTime, isLiveEvent, nowMs, whenLabel } from "@/lib/format";
 import { LiveBadge } from "@/components/event-card";
 import { SponsorStrip } from "@/components/sponsor-strip";
@@ -31,7 +32,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
   const e = await load(id);
   if (!e) notFound();
   const user = await getCurrentUser();
-  const sponsors = await listSponsors({ universityId: e.university_id, eventId: e.id });
+  const [sponsors, mySponsor] = await Promise.all([listSponsors({ universityId: e.university_id, eventId: e.id }), getMySponsorProfile()]);
   const supabase = await createClient();
   const { count: myTickets } = user
     ? await supabase.from("tickets").select("id", { count: "exact", head: true }).eq("event_id", e.id).eq("user_id", user.id)
@@ -52,8 +53,8 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
           <div className="h-full w-full" style={{ background: `linear-gradient(135deg, ${e.universities.brand_color}, #07130c)` }} />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-base via-transparent to-ink/40" />
-        <div className="pt-safe absolute inset-x-3 top-3 flex justify-between">
-          <Link href={`/u/${e.universities.slug}`} className="rounded-full bg-ink/60 p-2 backdrop-blur" aria-label="Back">
+        <div className="top-safe absolute inset-x-3 flex justify-between">
+          <Link href={`/u/${e.universities.slug}`} className="glass rounded-full p-2.5" aria-label="Back">
             <ArrowLeft size={20} />
           </Link>
           <ShareButton title={e.title} />
@@ -90,7 +91,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
           <div className="mt-4 rounded-xl border border-danger/40 bg-danger/10 p-3 font-semibold text-danger">This event has been cancelled.</div>
         )}
 
-        <div className="mt-5 space-y-3 rounded-[var(--radius-card)] border border-line bg-surface p-4">
+        <div className="mt-5 space-y-3 rounded-[var(--radius-card)] border border-line card-glass p-4">
           <div className="flex items-start gap-3">
             <span className="rounded-xl bg-leaf/12 p-2 text-leaf"><Clock size={20} /></span>
             <div className="flex-1">
@@ -123,6 +124,18 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
               <Ticket size={20} /> You have {myTickets} ticket{myTickets === 1 ? "" : "s"}
             </span>
             <span className="text-sm font-semibold">View →</span>
+          </Link>
+        )}
+
+        {mySponsor && !mySponsor.is_hidden && !ended && (
+          <Link
+            href={`/u/${e.universities.slug}?sponsor_event=${e.id}#propose`}
+            className="squircle mt-4 flex items-center justify-between border border-leaf/40 bg-leaf/10 p-4"
+          >
+            <span className="flex items-center gap-2 font-semibold text-leaf">
+              <Handshake size={20} /> Sponsor this event as {mySponsor.name}
+            </span>
+            <span className="text-sm font-semibold">→</span>
           </Link>
         )}
 

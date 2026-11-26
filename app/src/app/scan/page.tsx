@@ -46,7 +46,7 @@ export default async function ScanPicker() {
             const live = isLive(e.starts_at, e.ends_at);
             return (
               <li key={e.id}>
-                <Link href={`/scan/${e.id}`} className="flex items-center gap-3 rounded-2xl border border-line bg-surface p-4 transition hover:border-leaf">
+                <Link href={`/scan/${e.id}`} className="flex items-center gap-3 rounded-2xl border border-line card-glass p-4 transition hover:border-leaf">
                   <span className="h-10 w-1.5 rounded-full" style={{ background: u?.brand_color ?? "#52d483" }} />
                   <span className="flex-1">
                     <span className="block font-semibold">{e.title}</span>

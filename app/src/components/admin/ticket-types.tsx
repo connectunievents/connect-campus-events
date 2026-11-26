@@ -69,7 +69,7 @@ export function TicketTypesManager({ slug, eventId, types }: { slug: string; eve
             </div>
           </ActionForm>
         ) : (
-          <div key={t.id} className="flex items-center justify-between gap-3 rounded-2xl border border-line bg-surface p-4">
+          <div key={t.id} className="flex items-center justify-between gap-3 rounded-2xl border border-line card-glass p-4">
             <div>
               <div className="font-semibold">
                 {t.name} <span className="ml-2 text-leaf">{money(t.price_cents, t.currency)}</span>

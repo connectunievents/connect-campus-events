@@ -15,7 +15,7 @@ export default async function UniSettings({ params }: { params: Promise<{ slug: 
 
   return (
     <ActionForm action={saveUniversity.bind(null, slug)} className="grid gap-5 lg:grid-cols-[1fr_340px]">
-      <div className="grid gap-4 rounded-2xl border border-line bg-surface p-5 sm:grid-cols-2">
+      <div className="grid gap-4 rounded-2xl border border-line card-glass p-5 sm:grid-cols-2">
         <div className="sm:col-span-2">
           <label className="label" htmlFor="name">Name</label>
           <input id="name" name="name" defaultValue={u.name} className="field" />
@@ -47,7 +47,7 @@ export default async function UniSettings({ params }: { params: Promise<{ slug: 
         </div>
       </div>
       <div className="space-y-4">
-        <div className="space-y-4 rounded-2xl border border-line bg-surface p-5">
+        <div className="space-y-4 rounded-2xl border border-line card-glass p-5">
           <ImageUpload name="cover_url" defaultValue={u.cover_url} label="Cover photo" />
           <ImageUpload name="logo_url" defaultValue={u.logo_url} label="Logo" aspect="aspect-square" />
         </div>

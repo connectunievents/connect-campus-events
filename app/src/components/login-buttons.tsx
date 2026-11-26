@@ -89,7 +89,7 @@ export function LoginButtons({ next }: { next: string }) {
             className="field"
             autoComplete="email"
           />
-          <button disabled={!!busy} className={`${base} border border-line bg-surface`}>
+          <button disabled={!!busy} className={`${base} border border-line card-glass`}>
             {busy === "email" ? <Loader2 className="animate-spin" size={20} /> : <Mail size={20} />} Email me a sign-in link
           </button>
         </form>

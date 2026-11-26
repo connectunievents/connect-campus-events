@@ -100,5 +100,47 @@ export const CATEGORIES = [
   { id: "general", label: "Other" },
 ] as const;
 
+export interface SponsorProfile {
+  id: string;
+  owner_id: string;
+  slug: string;
+  name: string;
+  tagline: string | null;
+  about: string | null;
+  industry: string;
+  logo_url: string | null;
+  cover_url: string | null;
+  website_url: string | null;
+  city: string | null;
+  country: string | null;
+  interests: string[];
+  offer: string | null;
+  budget_range: string | null;
+  show_contact: boolean;
+  is_published: boolean;
+  is_hidden: boolean;
+  created_at: string;
+}
+
+/** Public columns (contact details come from the sponsor_contact() function). */
+export const SPONSOR_PROFILE_SELECT =
+  "id, owner_id, slug, name, tagline, about, industry, logo_url, cover_url, website_url, city, country, interests, offer, budget_range, show_contact, is_published, is_hidden, created_at";
+
+export const INDUSTRIES = [
+  { id: "food", label: "Food & drinks" },
+  { id: "tech", label: "Technology" },
+  { id: "finance", label: "Banking & finance" },
+  { id: "telecom", label: "Telecom" },
+  { id: "retail", label: "Retail & fashion" },
+  { id: "health", label: "Health & wellness" },
+  { id: "education", label: "Education" },
+  { id: "media", label: "Media & entertainment" },
+  { id: "auto", label: "Automotive & travel" },
+  { id: "ngo", label: "NGO & foundations" },
+  { id: "other", label: "Other" },
+] as const;
+
+export const industryLabel = (id: string) => INDUSTRIES.find((i) => i.id === id)?.label ?? "Other";
+
 export const EVENT_SELECT =
   "*, universities(slug,name,short_name,brand_color,logo_url), ticket_types(price_cents,quantity,sold,currency)";

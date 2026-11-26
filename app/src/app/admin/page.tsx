@@ -37,7 +37,7 @@ export default async function AdminHome({ searchParams }: { searchParams: Promis
             <Link
               key={m.universities.id}
               href={`/admin/${m.universities.slug}`}
-              className="group flex items-center gap-3 rounded-2xl border border-line bg-surface p-4 transition hover:border-leaf"
+              className="group flex items-center gap-3 rounded-2xl border border-line card-glass p-4 transition hover:border-leaf"
             >
               <UniLogo uni={m.universities} size={48} />
               <span>

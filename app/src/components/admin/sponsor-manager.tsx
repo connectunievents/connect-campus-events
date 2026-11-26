@@ -8,7 +8,7 @@ export function SponsorManager({ slug, sponsors, events }: { slug: string | null
       <section className="space-y-3">
         {sponsors.length === 0 && <p className="rounded-2xl border border-dashed border-line p-6 text-center text-muted">No sponsors yet.</p>}
         {sponsors.map((s) => (
-          <div key={s.id} className="flex items-center gap-4 rounded-2xl border border-line bg-surface p-4">
+          <div key={s.id} className="flex items-center gap-4 rounded-2xl border border-line card-glass p-4">
             <div className="flex h-14 w-24 items-center justify-center rounded-xl bg-white p-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={s.logo_url} alt={s.name} className="max-h-full max-w-full object-contain" />
@@ -34,7 +34,7 @@ export function SponsorManager({ slug, sponsors, events }: { slug: string | null
         ))}
       </section>
 
-      <ActionForm action={saveSponsor.bind(null, slug)} resetOnSuccess className="h-fit space-y-4 rounded-2xl border border-line bg-surface p-5">
+      <ActionForm action={saveSponsor.bind(null, slug)} resetOnSuccess className="h-fit space-y-4 rounded-2xl border border-line card-glass p-5">
         <h2 className="font-bold">Add sponsor</h2>
         <div>
           <label className="label" htmlFor="s-name">Name *</label>

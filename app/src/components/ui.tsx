@@ -34,13 +34,13 @@ type BtnProps = ComponentProps<"button"> & { variant?: "primary" | "ghost" | "ou
 
 export function buttonClass(variant: BtnProps["variant"] = "primary", size: BtnProps["size"] = "md") {
   return clsx(
-    "inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50",
-    size === "sm" && "px-3 py-1.5 text-sm",
-    size === "md" && "px-4 py-2.5",
-    size === "lg" && "px-5 py-3.5 text-lg",
-    variant === "primary" && "bg-leaf text-ink hover:bg-pale shadow-lg shadow-leaf/20",
+    "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap font-semibold duration-200 active:scale-[0.96] disabled:pointer-events-none disabled:opacity-50",
+    size === "sm" && "min-h-9 rounded-[0.9rem] px-3.5 text-sm",
+    size === "md" && "min-h-11 rounded-[1.1rem] px-4",
+    size === "lg" && "min-h-[3.25rem] rounded-[1.25rem] px-5 text-lg",
+    variant === "primary" && "bg-leaf text-ink shadow-[0_8px_24px_-8px_rgb(82_212_131/0.55),inset_0_1px_0_rgb(255_255_255/0.35)] hover:bg-pale",
     variant === "ghost" && "text-text hover:bg-surface-2",
-    variant === "outline" && "border border-line text-text hover:border-leaf hover:text-leaf",
+    variant === "outline" && "border border-white/10 bg-white/[0.04] text-text shadow-[inset_0_1px_0_rgb(255_255_255/0.06)] hover:border-leaf/60 hover:text-leaf",
     variant === "danger" && "bg-danger/15 text-danger hover:bg-danger/25",
   );
 }
@@ -50,14 +50,14 @@ export function Button({ variant, size, className, ...rest }: BtnProps) {
 }
 
 export function Card({ className, ...rest }: ComponentProps<"div">) {
-  return <div {...rest} className={clsx("rounded-[var(--radius-card)] border border-line bg-surface", className)} />;
+  return <div {...rest} className={clsx("card-glass rounded-[var(--radius-card)] border border-line", className)} />;
 }
 
 export function PageTitle({ title, subtitle, children }: { title: string; subtitle?: string; children?: ReactNode }) {
   return (
-    <header className="pt-safe flex items-end justify-between gap-3 px-4 pb-4 pt-4">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
+    <header className="pt-safe flex items-end justify-between gap-3 px-4 pb-4">
+      <div className="min-w-0">
+        <h1 className="text-[clamp(1.6rem,7vw,2.1rem)] font-bold leading-tight tracking-tight">{title}</h1>
         {subtitle && <p className="mt-1 text-sm text-muted">{subtitle}</p>}
       </div>
       {children}

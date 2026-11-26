@@ -9,7 +9,9 @@ export default function AdminRoot({ children }: { children: React.ReactNode }) {
           <Link href="/admin">
             <Wordmark />
           </Link>
-          <nav className="flex items-center gap-1 text-sm font-semibold">
+          <nav className="no-scrollbar -mr-2 flex min-w-0 items-center gap-1 overflow-x-auto text-sm font-semibold [&>a]:shrink-0">
+            <Link href="/sponsors" className="rounded-lg px-3 py-1.5 text-muted hover:bg-surface-2 hover:text-text">Find sponsors</Link>
+            <Link href="/inbox" className="rounded-lg px-3 py-1.5 text-muted hover:bg-surface-2 hover:text-text">Inbox</Link>
             <Link href="/scan" className="rounded-lg px-3 py-1.5 text-muted hover:bg-surface-2 hover:text-text">Scanner</Link>
             <Link href="/" className="rounded-lg px-3 py-1.5 text-muted hover:bg-surface-2 hover:text-text">Open app</Link>
           </nav>

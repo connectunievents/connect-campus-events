@@ -43,7 +43,7 @@ export default async function ExplorePage({ searchParams }: { searchParams: Prom
         {followed.length > 0 && (
           <Link
             href={chip(category, !mineOnly)}
-            className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${mineOnly ? "bg-leaf text-ink" : "border border-line bg-surface text-muted"}`}
+            className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${mineOnly ? "bg-leaf text-ink" : "border border-line card-glass text-muted"}`}
           >
             ★ Following
           </Link>
@@ -53,7 +53,7 @@ export default async function ExplorePage({ searchParams }: { searchParams: Prom
             key={c.id}
             href={chip(c.id)}
             className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${
-              category === c.id ? "bg-text text-ink" : "border border-line bg-surface text-muted hover:text-text"
+              category === c.id ? "bg-text text-ink" : "border border-line card-glass text-muted hover:text-text"
             }`}
           >
             {c.label}

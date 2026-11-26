@@ -20,6 +20,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
+  interactiveWidget: "resizes-content", // keyboard shrinks the layout instead of covering inputs
 };
 
 // Every page reads the auth cookie, so render on each request.

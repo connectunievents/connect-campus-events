@@ -55,12 +55,12 @@ export default async function HomePage() {
 
       <section className="px-4 pb-5 pt-3">
         <p className="text-sm text-muted">{greeting()}{firstName ? `, ${firstName}` : ""} 👋</p>
-        <h1 className="mt-1 text-[2rem] font-bold leading-[1.1] tracking-tight">
+        <h1 className="mt-1 text-[clamp(1.75rem,8.5vw,2.5rem)] font-bold leading-[1.1] tracking-tight">
           What&apos;s on <span className="font-display italic text-leaf">on campus</span> today?
         </h1>
         <Link
           href="/explore"
-          className="mt-4 flex items-center gap-3 rounded-2xl border border-line bg-surface px-4 py-3.5 text-muted transition hover:border-leaf/60"
+          className="mt-4 flex items-center gap-3 rounded-2xl border border-line card-glass px-4 py-3.5 text-muted transition hover:border-leaf/60"
         >
           <Search size={20} className="text-leaf" />
           <span>Search universities or events</span>
@@ -70,7 +70,7 @@ export default async function HomePage() {
             <Link
               key={c.id}
               href={`/explore?category=${c.id}`}
-              className="shrink-0 rounded-full border border-line bg-surface px-3.5 py-1.5 text-sm font-medium text-muted transition hover:border-leaf hover:text-leaf"
+              className="shrink-0 rounded-full border border-line card-glass px-3.5 py-1.5 text-sm font-medium text-muted transition hover:border-leaf hover:text-leaf"
             >
               {c.label}
             </Link>

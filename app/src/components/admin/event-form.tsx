@@ -17,7 +17,7 @@ export function EventForm({ action, event }: { action: (p: FormState, f: FormDat
 
   return (
     <ActionForm action={action} className="grid gap-5 lg:grid-cols-[1fr_340px]">
-      <div className="space-y-4 rounded-2xl border border-line bg-surface p-5">
+      <div className="space-y-4 rounded-2xl border border-line card-glass p-5">
         <div>
           <label className="label" htmlFor="title">Title *</label>
           <input id="title" name="title" required defaultValue={event?.title} className="field text-lg font-semibold" placeholder="Spring Career Fair" />
@@ -69,7 +69,7 @@ export function EventForm({ action, event }: { action: (p: FormState, f: FormDat
         </div>
       </div>
       <div className="space-y-4">
-        <div className="rounded-2xl border border-line bg-surface p-5">
+        <div className="rounded-2xl border border-line card-glass p-5">
           <ImageUpload name="cover_url" defaultValue={event?.cover_url} label="Cover image" aspect="aspect-[4/5]" />
         </div>
         <SubmitButton className="w-full py-3">{event ? "Save changes" : "Create draft"}</SubmitButton>

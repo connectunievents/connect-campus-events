@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Building2, ChevronRight, Crown, Handshake, LogOut, ScanLine, ShieldCheck } from "lucide-react";
+import { Building2, ChevronRight, Crown, Handshake, Inbox, LogOut, ScanLine, ShieldCheck, Store } from "lucide-react";
 import { getMemberships, requireUser } from "@/lib/auth";
+import { getMySponsorProfile, getUnreadCount } from "@/lib/sponsors";
 import { createClient } from "@/lib/supabase/server";
 import { PageTitle } from "@/components/ui";
 
@@ -22,7 +23,7 @@ function Row({ href, icon, title, sub }: { href: string; icon: React.ReactNode; 
 
 export default async function ProfilePage() {
   const user = await requireUser("/profile");
-  const memberships = await getMemberships();
+  const [memberships, mySponsor, unread] = await Promise.all([getMemberships(), getMySponsorProfile(), getUnreadCount()]);
   const supabase = await createClient();
   const { data: follows } = await supabase
     .from("follows")
@@ -35,7 +36,7 @@ export default async function ProfilePage() {
   return (
     <main className="animate-fade-up">
       <PageTitle title="Profile" />
-      <section className="mx-4 flex items-center gap-4 rounded-[var(--radius-card)] border border-line bg-surface p-4">
+      <section className="mx-4 flex items-center gap-4 rounded-[var(--radius-card)] border border-line card-glass p-4">
         <div className="relative h-16 w-16 overflow-hidden rounded-full bg-surface-2">
           {user.avatarUrl ? (
             <Image src={user.avatarUrl} alt="" fill sizes="64px" className="object-cover" />
@@ -55,7 +56,7 @@ export default async function ProfilePage() {
       </section>
 
       {(canScan || canAdmin || user.isOwner) && (
-        <section className="mx-4 mt-6 overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface">
+        <section className="mx-4 mt-6 overflow-hidden rounded-[var(--radius-card)] border border-line card-glass">
           <p className="px-4 pt-3 text-xs font-semibold uppercase tracking-widest text-muted">Staff tools</p>
           {canScan && <Row href="/scan" icon={<ScanLine size={20} />} title="Gate scanner" sub="Scan tickets at the entrance" />}
           {canAdmin && <Row href="/admin" icon={<ShieldCheck size={20} />} title="University admin" sub="Events, tickets, sponsors, team" />}
@@ -63,7 +64,7 @@ export default async function ProfilePage() {
         </section>
       )}
 
-      <section className="mx-4 mt-6 overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface">
+      <section className="mx-4 mt-6 overflow-hidden rounded-[var(--radius-card)] border border-line card-glass">
         <p className="px-4 pt-3 text-xs font-semibold uppercase tracking-widest text-muted">Following</p>
         {followed.length ? (
           followed.map((u) => (
@@ -74,8 +75,15 @@ export default async function ProfilePage() {
         )}
       </section>
 
-      <section className="mx-4 mt-6 overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface">
-        <Row href="/sponsor" icon={<Handshake size={20} />} title="Become a sponsor" sub="Put your brand in front of students" />
+      <section className="mx-4 mt-6 overflow-hidden rounded-[var(--radius-card)] border border-line card-glass">
+        <Row href="/inbox" icon={<Inbox size={20} />} title={`Inbox${unread ? ` · ${unread} new` : ""}`} sub="Sponsorship conversations" />
+        <Row href="/sponsors" icon={<Store size={20} />} title="Sponsors directory" sub="Companies that back campus events" />
+        <Row
+          href="/sponsor-hub"
+          icon={<Handshake size={20} />}
+          title={mySponsor ? "My sponsor profile" : "Become a sponsor"}
+          sub={mySponsor ? mySponsor.name : "Create a free public profile for your company"}
+        />
       </section>
 
       <form action="/auth/signout" method="post" className="mx-4 mt-6">

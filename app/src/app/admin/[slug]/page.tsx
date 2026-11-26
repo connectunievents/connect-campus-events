@@ -16,7 +16,7 @@ type Stats = { event_id: string; sold: number; capacity: number; checked_in: num
 
 function Stat({ icon, label, value }: { icon: React.ReactNode; label: string; value: string | number }) {
   return (
-    <div className="rounded-2xl border border-line bg-surface p-4">
+    <div className="rounded-2xl border border-line card-glass p-4">
       <div className="flex items-center gap-2 text-sm text-muted">{icon} {label}</div>
       <div className="mt-1 text-2xl font-bold">{value}</div>
     </div>

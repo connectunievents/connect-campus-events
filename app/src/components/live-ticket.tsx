@@ -149,7 +149,7 @@ export function LiveTicket({ tickets, startIndex }: { tickets: LiveTicketData[];
           drag={tickets.length > 1 ? "x" : false}
           dragConstraints={{ left: 0, right: 0 }}
           onDragEnd={(_, info) => (info.offset.x < -80 ? go(1) : info.offset.x > 80 ? go(-1) : null)}
-          className="overflow-hidden rounded-[2rem] border border-line bg-surface"
+          className="overflow-hidden rounded-[2rem] border border-line card-glass"
         >
           <div className="p-5 text-white" style={{ background: `linear-gradient(135deg, ${color}, ${color}88)` }}>
             <div className="text-xs font-bold uppercase tracking-widest text-white/80">{e.universities?.name}</div>

@@ -8,6 +8,8 @@ import { getFollowedIds, listEvents, listSponsors } from "@/lib/queries";
 import { isLiveEvent } from "@/lib/format";
 import { EventPoster, EventRow } from "@/components/event-card";
 import { FollowButton } from "@/components/follow-button";
+import { StartThreadForm } from "@/components/start-thread-form";
+import { getMySponsorProfile } from "@/lib/sponsors";
 import { UniLogo } from "@/components/uni-logo";
 import { EmptyState, Rail, SectionHeader, buttonClass } from "@/components/ui";
 import { SponsorStrip } from "@/components/sponsor-strip";
@@ -20,19 +22,21 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return { title: data?.name ?? "University" };
 }
 
-export default async function UniversityPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function UniversityPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ sponsor_event?: string }> }) {
   const { slug } = await params;
+  const { sponsor_event } = await searchParams;
   const supabase = await createClient();
   const { data } = await supabase.from("universities").select("*").eq("slug", slug).maybeSingle();
   if (!data) notFound();
   const uni = data as University;
 
   const user = await getCurrentUser();
-  const [followed, events, sponsors, memberships] = await Promise.all([
+  const [followed, events, sponsors, memberships, mySponsor] = await Promise.all([
     getFollowedIds(user?.id),
     listEvents({ universityIds: [uni.id], limit: 50 }),
     listSponsors({ universityId: uni.id }),
     getMemberships(),
+    getMySponsorProfile(),
   ]);
   const isStaff = memberships.some((m) => m.universities.slug === slug);
   const live = events.filter((e) => isLiveEvent(e));
@@ -48,7 +52,7 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
           <div className="h-full w-full" style={{ background: `linear-gradient(135deg, ${color}, #07130c)` }} />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-base via-base/50 to-transparent" />
-        <Link href="/explore" className="pt-safe absolute left-3 top-3 rounded-full bg-ink/60 p-2 backdrop-blur" aria-label="Back">
+        <Link href="/explore" className="top-safe glass absolute left-3 rounded-full p-2.5" aria-label="Back">
           <ArrowLeft size={20} />
         </Link>
         {uni.cover_credit && (
@@ -110,6 +114,22 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
       <div className="my-8">
         <SponsorStrip sponsors={sponsors} title={`${uni.short_name ?? "Campus"} partners`} />
       </div>
+
+      {mySponsor && !mySponsor.is_hidden && (
+        <section id="propose" className="squircle-lg mx-4 mb-8 border border-leaf/30 bg-gradient-to-br from-leaf/10 to-transparent p-5">
+          <h2 className="text-lg font-bold">Propose a sponsorship to {uni.short_name ?? uni.name}</h2>
+          <p className="mt-1 text-sm text-muted">
+            You&apos;re writing as <b className="text-text">{mySponsor.name}</b>. Their events team will reply in your inbox.
+          </p>
+          <StartThreadForm
+            mode="sponsor"
+            sponsorId={mySponsor.id}
+            sponsorName={mySponsor.name}
+            universities={[{ id: uni.id, name: uni.name, events: events.map((e) => ({ id: e.id, title: e.title, starts_at: e.starts_at })) }]}
+            defaultEventId={sponsor_event}
+          />
+        </section>
+      )}
     </main>
   );
 }

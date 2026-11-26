@@ -24,7 +24,7 @@ export function SponsorForm({ universities }: { universities: { id: string; name
   const err = (k: string) => state.fieldErrors?.[k] && <p className="mt-1 text-xs text-danger">{state.fieldErrors[k]}</p>;
 
   return (
-    <form action={action} className="my-8 space-y-4 rounded-[var(--radius-card)] border border-line bg-surface p-5">
+    <form action={action} className="my-8 space-y-4 rounded-[var(--radius-card)] border border-line card-glass p-5">
       {/* Honeypot: bots fill this, humans never see it. */}
       <input type="text" name="website2" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
       <div className="grid gap-4 sm:grid-cols-2">

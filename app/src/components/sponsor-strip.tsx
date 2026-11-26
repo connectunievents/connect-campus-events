@@ -18,7 +18,7 @@ export function SponsorStrip({ sponsors, title = "Supported by" }: { sponsors: S
   return (
     <section aria-label={title} className="px-4">
       <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-muted">{title}</p>
-      <div className="relative overflow-hidden rounded-2xl border border-line bg-surface py-4 [mask-image:linear-gradient(90deg,transparent,black_12%,black_88%,transparent)]">
+      <div className="relative overflow-hidden rounded-2xl border border-line card-glass py-4 [mask-image:linear-gradient(90deg,transparent,black_12%,black_88%,transparent)]">
         <div className="flex w-max animate-[marquee_28s_linear_infinite] items-center gap-10 px-5 hover:[animation-play-state:paused]">
           {loop.map((s, i) => (
             <a

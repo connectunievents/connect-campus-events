@@ -14,7 +14,7 @@ export function ShareButton({ title }: { title: string }) {
           toast.success("Link copied");
         }
       }}
-      className="rounded-full bg-ink/60 p-2 backdrop-blur"
+      className="glass rounded-full p-2.5"
       aria-label="Share"
     >
       <Share2 size={20} />

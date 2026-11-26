@@ -57,8 +57,7 @@ export function InstallPrompt() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 140, opacity: 0 }}
           transition={{ type: "spring", damping: 26, stiffness: 300 }}
-          className="fixed inset-x-3 z-50 mx-auto max-w-md rounded-2xl border border-line glass p-4 shadow-2xl shadow-black/50"
-          style={{ bottom: "calc(env(safe-area-inset-bottom, 0px) + 5.75rem)" }}
+          className="bottom-above-nav glass fixed inset-x-3 z-50 mx-auto max-w-md rounded-[1.75rem] border p-4"
           role="dialog"
           aria-label="Install Connect"
         >

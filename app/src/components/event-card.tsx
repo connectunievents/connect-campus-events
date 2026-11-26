@@ -32,7 +32,7 @@ export function EventPoster({ e, priority = false }: { e: EventWithUni; priority
   return (
     <Link
       href={`/e/${e.id}`}
-      className="group relative block aspect-[4/5] w-[78vw] max-w-[300px] shrink-0 snap-start overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface"
+      className="group relative block aspect-[4/5] w-[78vw] max-w-[300px] shrink-0 snap-start overflow-hidden rounded-[var(--radius-card)] border border-line card-glass"
     >
       <Image
         src={e.cover_url || FALLBACK}

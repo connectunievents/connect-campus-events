@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { SUPABASE_ANON_KEY, SUPABASE_URL, isSupabaseConfigured } from "@/lib/env";
 
-const PROTECTED = ["/tickets", "/profile", "/scan", "/admin", "/owner"];
+const PROTECTED = ["/tickets", "/profile", "/scan", "/admin", "/owner", "/inbox", "/sponsor-hub"];
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });

@@ -106,7 +106,7 @@ function TicketStack({ group }: { group: Row[] }) {
           {group.length > 2 && <div className="absolute inset-x-8 -bottom-4 h-6 rounded-b-2xl border border-line bg-surface-2/30" />}
         </>
       )}
-      <div className="relative overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface transition group-active:scale-[0.99]">
+      <div className="relative overflow-hidden rounded-[var(--radius-card)] border border-line card-glass transition group-active:scale-[0.99]">
         <div className="relative h-32">
           {e.cover_url && <Image src={e.cover_url} alt="" fill sizes="600px" className="object-cover" />}
           <div className="absolute inset-0" style={{ background: `linear-gradient(90deg, ${color}ee, ${color}55 60%, transparent)` }} />

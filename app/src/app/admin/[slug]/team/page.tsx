@@ -53,7 +53,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
         </table>
       </section>
 
-      <ActionForm action={addMember.bind(null, slug)} resetOnSuccess className="h-fit space-y-4 rounded-2xl border border-line bg-surface p-5">
+      <ActionForm action={addMember.bind(null, slug)} resetOnSuccess className="h-fit space-y-4 rounded-2xl border border-line card-glass p-5">
         <h2 className="font-bold">Add a team member</h2>
         <p className="text-sm text-muted">They need to sign in to Connect once (Google or Microsoft) before you can add them.</p>
         <div>

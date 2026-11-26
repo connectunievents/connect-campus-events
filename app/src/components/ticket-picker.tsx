@@ -62,10 +62,9 @@ export function TicketPicker({
     <>
       {/* Sticky bar */}
       <div
-        className="fixed inset-x-0 z-30 mx-auto max-w-md px-3 md:max-w-2xl"
-        style={{ bottom: "calc(env(safe-area-inset-bottom, 0px) + 5.4rem)" }}
+        className="bottom-above-nav fixed inset-x-0 z-30 mx-auto w-full max-w-md px-3 md:max-w-lg"
       >
-        <div className="glass flex items-center justify-between gap-3 rounded-2xl border border-line p-3 pl-4 shadow-2xl shadow-black/50">
+        <div className="glass flex items-center justify-between gap-3 rounded-[1.75rem] border p-2.5 pl-5">
           <div>
             <div className="text-xs text-muted">{minPrice === 0 ? "Tickets" : "From"}</div>
             <div className="text-lg font-bold">{money(minPrice, types[0].currency)}</div>
@@ -93,7 +92,7 @@ export function TicketPicker({
             <motion.div
               role="dialog"
               aria-label="Choose tickets"
-              className="fixed inset-x-0 bottom-0 z-50 mx-auto max-h-[88dvh] max-w-md overflow-y-auto rounded-t-3xl border border-line bg-surface p-5 md:max-w-2xl"
+              className="glass fixed inset-x-0 bottom-0 z-50 mx-auto max-h-[88dvh] max-w-md overflow-y-auto overscroll-contain rounded-t-[2rem] border p-5 md:max-w-lg"
               style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 1.25rem)" }}
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
